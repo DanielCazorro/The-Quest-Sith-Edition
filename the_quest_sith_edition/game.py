@@ -5,6 +5,12 @@ import pygame as pg
 
 
 class The_Quest:
+
     def __init__(self):
         print("Se inicia el juego")
         pg.init()
+
+    def jugando(self):
+        print("Estoy en el bucle principal")
+        # Aquí va el bucle principal
+        pass
