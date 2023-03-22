@@ -8,12 +8,19 @@ from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA
 
 
 class Pantalla:
-    pass
+
+    def __init__(self, pantalla):
+        self.pantalla = pantalla
+
+    def bucle_principal(self):
+        pass
 
 
 class Pantalla_Inicio(Pantalla):
-    pass
+    def __init__(self, pantalla):
+        super().__init__(pantalla)
 
 
 class Pantalla_Jugar(Pantalla):
-    pass
+    def __init__(self, pantalla):
+        super().__init__(pantalla)
