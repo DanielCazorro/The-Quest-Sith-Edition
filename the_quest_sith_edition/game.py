@@ -3,6 +3,7 @@ Este será el archivo donde va el juego en sí, es decir la clase del juego, con
 """
 import os
 import pygame as pg
+from pygame.sprite import Sprite
 
 from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA
 
