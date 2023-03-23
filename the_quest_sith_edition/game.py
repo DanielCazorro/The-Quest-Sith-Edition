@@ -24,6 +24,12 @@ class The_Quest:
     def jugando(self):
         print("Estoy en el bucle principal")
         # Aquí va el bucle principal
+        for escena in self.pantallas:
+            he_acabado = escena.bucle_principal()
+            if he_acabado:
+                break
+            print("He acabado el for")
+            pg.quit
 
         # FIXME:
         # salir = False
