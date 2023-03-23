@@ -28,6 +28,7 @@ class Pantalla_Inicio(Pantalla):
 
         fuente1 = os.path.join("resources", "fonts",
                                "PressStart2P-Regular.ttf")
+        # FIXME: Aquí pondremos mas fuentes
         self.titulo = pg.font.Font(fuente1, 40)
 
         imagen_inicio = os.path.join("resources", "images", "Andor_galaxy.jpg")
@@ -47,18 +48,24 @@ class Pantalla_Inicio(Pantalla):
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                     salir = True
             self.pantalla.fill((99, 0, 0))
-            self.pintar_titulo()
+            self.pintar_fondo()
             self.pintar_texto()
             pg.display.flip()
         return False
 
-    def pintar_titulo(self):
-        ancho_titulo = self.logo.get_width()
-        pos_x = (ANCHO_PANTALLA - ancho_titulo) / 2
-        pos_y = ALTO_PANTALLA/3
-        self.pantalla.blit(self.logo, (pos_x, pos_y))
+    def pintar_fondo(self):
+        # FIXME: Esto sería para pintar un logo
+        # ancho_titulo = self.logo.get_width()
+        # pos_x = (ANCHO_PANTALLA - ancho_titulo) / 2
+        # pos_y = ALTO_PANTALLA/3
+        # self.pantalla.blit(self.logo, (pos_x, pos_y))
+
+        # FIXME: Aquí sería mejor poner la ruta de la imagen????
+        self.pantalla.fill((0, 0, 99))
+        self.pantalla.blit(self.logo, (0, 0))
 
     def pintar_texto(self):
+        # FIXME: Arreglar el tamaño de la letra
         mensaje = "Pulsa <espacio> para comenzar la partida ESTO ES UNA PRUEBA"
         # texto = pg.font.Font.render(self.tipografia, mensaje, True, (255, 255, 255))
         texto = self.titulo.render(mensaje, True, (255, 255, 255))
