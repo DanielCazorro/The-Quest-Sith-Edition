@@ -70,3 +70,11 @@ class Pantalla_Inicio(Pantalla):
 class Pantalla_Jugar(Pantalla):
     def __init__(self, pantalla):
         super().__init__(pantalla)
+
+        # FIXME: Elegir aquí la otra imagen y la letra correcta
+        fuente1 = os.path.join("resources", "fonts",
+                               "PressStart2P-Regular.ttf")
+        self.titulo = pg.font.Font(fuente1, 40)
+
+        imagen_inicio = os.path.join("resources", "images", "Andor_galaxy.jpg")
+        self.logo = pg.image.load(imagen_inicio)
