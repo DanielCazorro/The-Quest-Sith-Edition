@@ -6,6 +6,7 @@ import pygame as pg
 from pygame.sprite import Sprite
 
 from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA
+from .escenarios import Pantalla, Pantalla_Inicio, Pantalla_Jugar
 
 
 class The_Quest:
@@ -15,15 +16,21 @@ class The_Quest:
         pg.init()
         self.pantalla = pg.display.set_mode((ANCHO_PANTALLA, ALTO_PANTALLA))
         pg.display.set_caption("The Quest - Sith Edition")
+        self.pantallas = [
+            Pantalla(self.pantalla),
+            Pantalla_Inicio(self.pantalla),
+            Pantalla_Jugar(self.pantalla)]
 
     def jugando(self):
         print("Estoy en el bucle principal")
         # Aquí va el bucle principal
-        salir = False
-        while not salir:
-            for evento in pg.event.get():
-                if evento.type == pg.QUIT:
-                    salir = True
-            pg.draw.rect(self.pantalla, (255, 255, 255),
-                         pg.Rect(30, 60, 50, 150))
-            pg.display.flip()
+
+        # FIXME:
+        # salir = False
+        # while not salir:
+        #     for evento in pg.event.get():
+        #         if evento.type == pg.QUIT:
+        #             salir = True
+        #     pg.draw.rect(self.pantalla, (255, 255, 255),
+        #                  pg.Rect(30, 60, 50, 150))
+        #     pg.display.flip()
