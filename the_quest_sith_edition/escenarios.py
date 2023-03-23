@@ -27,6 +27,12 @@ class Pantalla_Inicio(Pantalla):
 
         self.titulo = pg.font.Font(fuente1, 40)
 
+    def bucle_principal(self):
+        pass
+
+    def pintar_titulo(self):
+        pass
+
 
 class Pantalla_Jugar(Pantalla):
     def __init__(self, pantalla):
