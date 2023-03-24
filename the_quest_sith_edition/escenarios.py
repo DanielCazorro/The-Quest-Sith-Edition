@@ -38,6 +38,11 @@ class Pantalla_Inicio(Pantalla):
             "resources", "fonts", "fuente-extra.ttf")
         self.extra = pg.font.Font(fuente_extra, 37)
 
+        # FIXME: PREGUNTAR AQUÍ SI HAY ALGÚN MÉTODO PARA CAMBIAR EL TAMAÑO DE LA LETRA DESDE LA FUNCIÓN PARA NO TENER QUE COPIAR Y PEGAR VARIAS VECES
+        fuente_extra_peque = os.path.join(
+            "resources", "fonts", "fuente-extra.ttf")
+        self.extra_peque = pg.font.Font(fuente_extra_peque, 25)
+
         imagen_inicio = os.path.join(
             "resources", "images", "fondo_pantalla_inicio.jpg")
         self.pantalla_inicio = pg.image.load(imagen_inicio)
@@ -88,11 +93,10 @@ class Pantalla_Inicio(Pantalla):
         pos_y = ALTO_PANTALLA * 6/8
         self.pantalla.blit(texto, (pos_x, pos_y))
 
-    # TODO: HACER UNA FUNCIÓN QUE SEA PARA CAMBIAR A LA PANTALLA DE INSTRUCCIONES, SIMILAR A LA SUPERIOR
-
     def pintar_texto_inicio_controles(self):
+
         mensaje = "Pulsa <i>\f para ver los controles"
-        texto = self.extra.render(mensaje, False, (COLOR_AMARILLO))
+        texto = self.extra_peque.render(mensaje, False, (COLOR_AMARILLO))
         anchura_texto = texto.get_width()
         pos_x = (ANCHO_PANTALLA - anchura_texto) / 40
         pos_y = ALTO_PANTALLA * 1/28
