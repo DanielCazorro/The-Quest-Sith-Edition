@@ -65,21 +65,21 @@ class Pantalla_Inicio(Pantalla):
             pg.display.flip()
         return False
 
-# TODO: Hacer funcion pintar logo para poner un logo básico tipo The Quest o algo de star wars
-
     def pintar_fondo(self):
         # FIXME: Aquí sería mejor poner la ruta de la imagen???? En lugar de ponerla como variable general en la clase?
         self.pantalla.fill((0, 0, 99))
         self.pantalla.blit(self.pantalla_inicio, (0, 0))
 
     def pintar_texto_iniciar(self):
-        # FIXME: Arreglar el tamaño de la letra Y HACER VARIABLE PARA EL COLOR, NO PONER NÚMEROS MÁGICOS
         mensaje = "Pulsa <espacio> para comenzar la partida"
         texto = self.titulo.render(mensaje, True, (COLOR_BLANCO))
         anchura_texto = texto.get_width()
         pos_x = (ANCHO_PANTALLA - anchura_texto) / 2
         pos_y = ALTO_PANTALLA * 5/8
         self.pantalla.blit(texto, (pos_x, pos_y))
+
+    # TODO: HACER UNA FUNCIÓN QUE SEA PARA CAMBIAR A LA PANTALLA DE INSTRUCCIONES, SIMILAR A LA SUPERIOR
+    # TODO: LO MISMO QUE ARRIBA, HACER UNA FUCNIÓN PARA QUE CAMBIE A LA PANTALLA DE LA HISTORIA
 
     def pintar_logo(self):
         ancho_titulo = self.logo_sith.get_width()
