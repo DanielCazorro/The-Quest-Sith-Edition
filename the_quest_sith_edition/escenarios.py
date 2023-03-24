@@ -36,7 +36,7 @@ class Pantalla_Inicio(Pantalla):
 
         fuente_extra = os.path.join(
             "resources", "fonts", "fuente-extra.ttf")
-        self.extra = pg.font.Font(fuente_extra, 20)
+        self.extra = pg.font.Font(fuente_extra, 37)
 
         imagen_inicio = os.path.join(
             "resources", "images", "fondo_pantalla_inicio.jpg")
@@ -61,6 +61,7 @@ class Pantalla_Inicio(Pantalla):
             # self.pantalla.fill((99, 0, 0))
             self.pintar_fondo()
             self.pintar_texto_iniciar()
+            self.pintar_texto_inicio_historia()
             self.pintar_logo()
             pg.display.flip()
         return False
@@ -78,8 +79,15 @@ class Pantalla_Inicio(Pantalla):
         pos_y = ALTO_PANTALLA * 5/8
         self.pantalla.blit(texto, (pos_x, pos_y))
 
+    def pintar_texto_inicio_historia(self):
+        mensaje = "Pulsa <s> para adentrarte en el lado oscuro y conocer todos sus secretos"
+        texto = self.extra.render(mensaje, False, (COLOR_AMARILLO))
+        anchura_texto = texto.get_width()
+        pos_x = (ANCHO_PANTALLA - anchura_texto) / 2
+        pos_y = ALTO_PANTALLA * 6/8
+        self.pantalla.blit(texto, (pos_x, pos_y))
+
     # TODO: HACER UNA FUNCIÓN QUE SEA PARA CAMBIAR A LA PANTALLA DE INSTRUCCIONES, SIMILAR A LA SUPERIOR
-    # TODO: LO MISMO QUE ARRIBA, HACER UNA FUCNIÓN PARA QUE CAMBIE A LA PANTALLA DE LA HISTORIA
 
     def pintar_logo(self):
         ancho_titulo = self.logo_sith.get_width()
