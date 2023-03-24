@@ -61,6 +61,7 @@ class Pantalla_Inicio(Pantalla):
             # self.pantalla.fill((99, 0, 0))
             self.pintar_fondo()
             self.pintar_texto_iniciar()
+            self.pintar_texto_inicio_controles()
             self.pintar_texto_inicio_historia()
             self.pintar_logo()
             pg.display.flip()
@@ -88,6 +89,14 @@ class Pantalla_Inicio(Pantalla):
         self.pantalla.blit(texto, (pos_x, pos_y))
 
     # TODO: HACER UNA FUNCIÓN QUE SEA PARA CAMBIAR A LA PANTALLA DE INSTRUCCIONES, SIMILAR A LA SUPERIOR
+
+    def pintar_texto_inicio_controles(self):
+        mensaje = "Pulsa <i>\f para ver los controles"
+        texto = self.extra.render(mensaje, False, (COLOR_AMARILLO))
+        anchura_texto = texto.get_width()
+        pos_x = (ANCHO_PANTALLA - anchura_texto) / 40
+        pos_y = ALTO_PANTALLA * 1/28
+        self.pantalla.blit(texto, (pos_x, pos_y))
 
     def pintar_logo(self):
         ancho_titulo = self.logo_sith.get_width()
