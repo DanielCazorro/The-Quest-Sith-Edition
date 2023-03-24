@@ -56,13 +56,15 @@ class Pantalla_Inicio(Pantalla):
         Devuelve True si hay que finalizar el programa
         Devuelve False si hay que pasar a la siguiente escena
         """
+
+        # TODO: Hay que hacer que al pulsar la tecla s cambie a la pantalla historia, pero que si se pulsa espacio cambie al juego. Seguir investigando por ahora
         super().bucle_principal()
         salir = False
         while not salir:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     return True
-                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                if event.type == pg.KEYDOWN and event.key == pg.K_s:
                     salir = True
             # self.pantalla.fill((99, 0, 0))
             self.pintar_fondo()
