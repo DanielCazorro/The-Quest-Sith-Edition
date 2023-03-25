@@ -65,12 +65,18 @@ class Pantalla_Inicio(Pantalla):
                     return True
                 if event.type == pg.KEYDOWN and event.key == pg.K_s:
                     salir = True
-            # self.pantalla.fill((99, 0, 0))
+                if event.type == pg.KEYDOWN and event.key == pg.K_a:
+                    if pg.mixer.music.get_busy():
+                        pg.mixer.music.stop()
+                    else:
+                        pg.mixer_music.play(-1, 0.0)
+            self.pantalla.fill((99, 0, 0))
             self.pintar_fondo()
             self.pintar_texto_iniciar()
             self.pintar_texto_inicio_controles()
             self.pintar_texto_inicio_historia()
             self.pintar_logo()
+            self.musica_fondo()
             pg.display.flip()
         return False
 
@@ -109,6 +115,16 @@ class Pantalla_Inicio(Pantalla):
         pos_x = (ANCHO_PANTALLA - ancho_titulo) / 2
         pos_y = ALTO_PANTALLA/48
         self.pantalla.blit(self.logo_sith, (pos_x, pos_y))
+
+
+# FIXME: arreglar que la música suene en la escena deseada, no en la siguietne
+
+    def musica_fondo(self):
+        # Music
+        musica_fondo = os.path.join("resources", "sounds", "musica_intro.mp3")
+        pg.mixer.music.load(musica_fondo)
+        pg.mixer.music.set_volume(0.75)
+        pg.mixer.music.play(-1, 0.0)
 
 
 class Pantalla_Instrucciones(Pantalla):
