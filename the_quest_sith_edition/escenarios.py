@@ -47,7 +47,6 @@ class Pantalla_Inicio(Pantalla):
             "resources", "images", "fondo_pantalla_inicio.jpg")
         self.pantalla_inicio = pg.image.load(imagen_inicio)
 
-        # FIXME: Cambiar el color del logo para que resalte con el fondo
         logo_sith = os.path.join("resources", "images", "logo_sith.png")
         self.logo_sith = pg.image.load(logo_sith)
 
