@@ -235,4 +235,13 @@ class Pantalla_Jugar(Pantalla):
 
 
 class Pantalla_Puntuacion(Pantalla):
-    pass
+    def bucle_principal(self):
+        super().bucle_principal()
+        salir = False
+        while not salir:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    return True
+            self.pantalla.fill((0, 0, 99))
+            pg.display.flip()
+        return False
