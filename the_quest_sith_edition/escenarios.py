@@ -5,6 +5,7 @@ import os
 import pygame as pg
 
 from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA, COLOR_AMARILLO, COLOR_BLANCO, FPS
+from .objects import Nave, Asteroides
 
 
 class Pantalla:
@@ -119,6 +120,7 @@ class Pantalla_Inicio(Pantalla):
 
 # FIXME: arreglar que la música suene en la escena deseada, no en la siguietne
 
+
     def musica_fondo(self):
         # Music
         musica_fondo = os.path.join("resources", "sounds", "musica_intro.mp3")
@@ -200,6 +202,29 @@ class Pantalla_Jugar(Pantalla):
     def __init__(self, pantalla):
         super().__init__(pantalla)
 
+        self.jugador = Nave()
+
+    def bucle_principal(self):
+        salir = False
+        inicio = False
+        while not salir:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    return True
+                if event.type == pg.KEYDOWN and event.key == pg.K_b:
+                    inicio = True
+                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                    salir = True
+            # self.pantalla.fill((99, 0, 0))
+            self.pintar_fondo()
+            # self.pintar_texto_iniciar()
+            # self.pintar_texto_inicio_controles()
+            # self.pintar_texto_inicio_historia()
+            # self.pintar_logo()
+            pg.display.flip()
+            self.jugador.update()
+            self.pantalla.blit(self.jugador.image, self.jugador.rect)
+
         # # FIXME: Elegir aquí la otra imagen y la letra correcta
         # fuente1 = os.path.join("resources", "fonts",
         #                        "PressStart2P-Regular.ttf")
@@ -207,3 +232,7 @@ class Pantalla_Jugar(Pantalla):
 
         # imagen_inicio = os.path.join("resources", "images", "Andor_galaxy.jpg")
         # self.logo = pg.image.load(imagen_inicio)
+
+
+class Pantalla_Puntuacion(Pantalla):
+    pass
