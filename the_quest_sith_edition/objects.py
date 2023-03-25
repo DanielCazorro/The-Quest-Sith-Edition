@@ -13,7 +13,7 @@ class Nave():
     Esta clase será para la nave principal
     """
     margen = 10
-    velocidad = 5
+    velocidad = 1
 
     # TODO: Se puden hacer varias imágenes, para que parezca que tenga movimiento
 
@@ -25,23 +25,24 @@ class Nave():
             midbottom=(ANCHO_PANTALLA/6, ALTO_PANTALLA/2))
 
     def update(self):
-        teclas_pulsar = pg.KEYDOWN()
-        if teclas_pulsar[pg.K_UP]:
+
+        teclas_pulsadas = pg.key.get_pressed()
+        if teclas_pulsadas[pg.K_DOWN]:
             self.rect.y += self.velocidad
-            if self.rect.y > ALTO_PANTALLA:
-                self.rect.y = ALTO_PANTALLA
-        if teclas_pulsar[pg.K_UP]:
+            if self.rect.top > ALTO_PANTALLA:
+                self.rect.top = ALTO_PANTALLA
+        if teclas_pulsadas[pg.K_UP]:
             self.rect.y -= self.velocidad
-            if self.rect.y < 0:
-                self.rect.y = 0
+            if self.rect.bottom < 0:
+                self.rect.bottom = 0
 
 
 class Asteroides(Sprite):
 
     velocidad_asteroide = -5
 
-    def __init__(self, *groups: _Group) -> None:
-        super().__init__(*groups)
+    def __init__(self) -> None:
+        super().__init__()
 
     def hay_colision(self, otro):
         if self.rect.colliderect(otro):
