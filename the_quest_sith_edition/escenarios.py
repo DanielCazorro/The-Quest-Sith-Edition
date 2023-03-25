@@ -152,10 +152,13 @@ class Pantalla_Historia(Pantalla):
         """
         super().bucle_principal()
         salir = False
+        inicio = False
         while not salir:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     return True
+                if event.type == pg.KEYDOWN and event.key == pg.K_b:
+                    inicio = True
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                     salir = True
             # self.pantalla.fill((99, 0, 0))
@@ -165,6 +168,11 @@ class Pantalla_Historia(Pantalla):
             # self.pintar_texto_inicio_historia()
             # self.pintar_logo()
             pg.display.flip()
+
+            # Si pulso b, se que paso por aquí. Ahora hay que intentar que al pasar por aquí haya una condición (junto con el bucle principal de game.py) para que pase a a la escena
+            if inicio == True:
+                print("Pasando por pantalla inicio")
+                return Pantalla_Inicio(Pantalla)
         return False
 
     def pintar_fondo(self):
