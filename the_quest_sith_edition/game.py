@@ -2,6 +2,7 @@
 Este será el archivo donde va el juego en sí, es decir la clase del juego, con su constructor y su función principal de juego
 """
 import os
+import ctypes
 import pygame as pg
 from pygame.sprite import Sprite
 
@@ -14,8 +15,19 @@ class The_Quest:
     def __init__(self):
         print("Se inicia el juego")
         pg.init()
+
+        # Estas líneas son para el icono que aparece en miniatura al abrir la aplicación
+        icono = os.path.join(
+            "resources", "images", "logo_sith_mini.png")
+        pg.display.set_icon(pg.image.load(icono))
+        if os.name == 'nt':
+            appid = 'mycompany.myproduct.subproduct.version'  # arbitrary string
+            ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(
+                appid)
+
         self.pantalla = pg.display.set_mode((ANCHO_PANTALLA, ALTO_PANTALLA))
         pg.display.set_caption("The Quest - Sith Edition")
+
         self.pantallas = [
             Pantalla(self.pantalla),
             Pantalla_Inicio(self.pantalla),
