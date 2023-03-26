@@ -36,6 +36,9 @@ class Nave():
             if self.rect.bottom < 0:
                 self.rect.bottom = 0
 
+    def aterrizar(self):
+        pass
+
 
 class Asteroides(Sprite):
 
@@ -47,3 +50,11 @@ class Asteroides(Sprite):
     def hay_colision(self, otro):
         if self.rect.colliderect(otro):
             pass
+
+
+class Puntuacion():
+    pass
+
+
+class Planet(Sprite):
+    pass

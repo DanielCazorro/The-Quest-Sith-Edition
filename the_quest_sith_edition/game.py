@@ -7,7 +7,7 @@ import pygame as pg
 from pygame.sprite import Sprite
 
 from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA
-from .escenarios import Pantalla, Pantalla_Historia, Pantalla_Inicio, Pantalla_Jugar
+from .escenarios import Pantalla, Pantalla_Historia, Pantalla_Inicio, Pantalla_Instrucciones, Pantalla_Jugar, Pantalla_Puntuacion
 
 
 class The_Quest:
@@ -31,8 +31,10 @@ class The_Quest:
         self.pantallas = [
             Pantalla(self.pantalla),
             Pantalla_Inicio(self.pantalla),
+            Pantalla_Instrucciones(self.pantalla),
             Pantalla_Historia(self.pantalla),
-            Pantalla_Jugar(self.pantalla)]
+            Pantalla_Jugar(self.pantalla),
+            Pantalla_Puntuacion(self.pantalla)]
 
     def jugando(self):
         print("Estoy en el bucle principal")
