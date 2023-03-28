@@ -47,30 +47,11 @@ class The_Quest:
     #         pg.quit
 
     def jugando(self):
-        he_acabado = self.bucle_principal()
-        if self.pantallas == self.pantallas[0]:
-            Pantalla(self.pantalla).bucle_principal()
-            if he_acabado:
-                Pantalla_Historia(self.pantalla).bucle_principal()
+        print("Estoy en el bucle principal")
+        acabado = self.pantalla.bucle_principal()
+        while self.pantallas[1]:
+            print("Pantalla0")
+            if acabado:
+                self.pantalla == self.pantallas[2].bucle_principal()
             else:
-                Pantalla_Instrucciones(self.pantalla).bucle_principal()
-        if self.pantallas == self.pantallas[1]:
-            if he_acabado:
-                Pantalla_Historia(self.pantalla).bucle_principal()
-            else:
-                Pantalla_Historia(self.pantalla).bucle_principal()
-        if self.pantallas == self.pantallas[2]:
-            if he_acabado:
-                Pantalla_Historia(self.pantalla).bucle_principal()
-            else:
-                Pantalla_Historia(self.pantalla).bucle_principal()
-
-            # FIXME:
-            # salir = False
-            # while not salir:
-            #     for evento in pg.event.get():
-            #         if evento.type == pg.QUIT:
-            #             salir = True
-            #     pg.draw.rect(self.pantalla, (255, 255, 255),
-            #                  pg.Rect(30, 60, 50, 150))
-            #     pg.display.flip()
+                self.pantalla == self.pantallas[2].bucle_principal()
