@@ -184,6 +184,7 @@ class Pantalla_Historia(Pantalla):
             # self.pintar_texto_inicio_controles()
             # self.pintar_texto_inicio_historia()
             # self.pintar_logo()
+            self.pintar_historia()
             pg.display.flip()
 
             # Si pulso b, se que paso por aquí. Ahora hay que intentar que al pasar por aquí haya una condición (junto con el bucle principal de game.py) para que pase a a la escena
@@ -196,6 +197,16 @@ class Pantalla_Historia(Pantalla):
         # FIXME: Aquí sería mejor poner la ruta de la imagen???? En lugar de ponerla como variable general en la clase?
         self.pantalla.fill((0, 0, 99))
         self.pantalla.blit(self.pantalla_historia, (0, 0))
+
+    def pintar_historia(self):
+        # FIXME:Probar a hacer varias frases en una lista, y con un bucle for irlos poniendo en posiciones
+        # TODO: Pensar en hacer un bucle o algo para que aparezcan de una en una las frases
+        frases = ["Hace mucho tiempo, en una galaxia lejana...",
+                  "El terror y la anarquía reinaban en todas partes.",
+                  "Por  suerte, surgieron unos héroes, que lucharon por la libertad...",
+                  "Los Sith. Caballeros nobles y poderosos que luchaban por el orden.",
+                  "Nuestra historia sigue a un gran caballero Sith,",
+                  "Que busca sin descanso a los malvados Jedi por los planetas de la galaxia."]
 
 
 class Pantalla_Jugar(Pantalla):
