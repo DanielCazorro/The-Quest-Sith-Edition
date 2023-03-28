@@ -36,25 +36,34 @@ class The_Quest:
             Pantalla_Jugar(self.pantalla),
             Pantalla_Puntuacion(self.pantalla)]
 
-    def jugando(self):
-        print("Estoy en el bucle principal")
-        # Aquí va el bucle principal
-        for escena in self.pantallas:
-            he_acabado = escena.bucle_principal()
-            if he_acabado:
-                break
-            print("He acabado el for")
-            pg.quit
-
     # def jugando(self):
-
+    #     print("Estoy en el bucle principal")
+    #     # Aquí va el bucle principal
     #     for escena in self.pantallas:
     #         he_acabado = escena.bucle_principal()
     #         if he_acabado:
-    #             escena[0]
-    #         else:
     #             break
     #         print("He acabado el for")
+    #         pg.quit
+
+    def jugando(self):
+        he_acabado = self.bucle_principal()
+        if self.pantallas == self.pantallas[0]:
+            Pantalla(self.pantalla).bucle_principal()
+            if he_acabado:
+                Pantalla_Historia(self.pantalla).bucle_principal()
+            else:
+                Pantalla_Instrucciones(self.pantalla).bucle_principal()
+        if self.pantallas == self.pantallas[1]:
+            if he_acabado:
+                Pantalla_Historia(self.pantalla).bucle_principal()
+            else:
+                Pantalla_Historia(self.pantalla).bucle_principal()
+        if self.pantallas == self.pantallas[2]:
+            if he_acabado:
+                Pantalla_Historia(self.pantalla).bucle_principal()
+            else:
+                Pantalla_Historia(self.pantalla).bucle_principal()
 
             # FIXME:
             # salir = False
