@@ -46,12 +46,22 @@ class The_Quest:
             print("He acabado el for")
             pg.quit
 
-        # FIXME:
-        # salir = False
-        # while not salir:
-        #     for evento in pg.event.get():
-        #         if evento.type == pg.QUIT:
-        #             salir = True
-        #     pg.draw.rect(self.pantalla, (255, 255, 255),
-        #                  pg.Rect(30, 60, 50, 150))
-        #     pg.display.flip()
+    # def jugando(self):
+
+    #     for escena in self.pantallas:
+    #         he_acabado = escena.bucle_principal()
+    #         if he_acabado:
+    #             escena[0]
+    #         else:
+    #             break
+    #         print("He acabado el for")
+
+            # FIXME:
+            # salir = False
+            # while not salir:
+            #     for evento in pg.event.get():
+            #         if evento.type == pg.QUIT:
+            #             salir = True
+            #     pg.draw.rect(self.pantalla, (255, 255, 255),
+            #                  pg.Rect(30, 60, 50, 150))
+            #     pg.display.flip()
