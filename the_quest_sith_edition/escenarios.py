@@ -1,7 +1,7 @@
 import os
 import pygame as pg
 
-from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA, COLOR_AMARILLO, COLOR_BLANCO, FPS
+from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA, COLOR_AMARILLO, COLOR_BLANCO, COLOR_ROJO, FPS
 from .objects import Nave, Asteroides
 
 
@@ -139,15 +139,11 @@ class Pantalla_Instrucciones(Pantalla):
         # TODO:  COMO LAS FUENTES SE REPITEN, SACARLAS A LA CLASE PANTALLA PARA LLAMARLAS Y NO ESTAR COPIA-PEGA
         fuente_titulo = os.path.join(
             "resources", "fonts", "fuente-titulo.ttf")
-        self.titulo = pg.font.Font(fuente_titulo, 30)
-
-        fuente_historia = os.path.join(
-            "resources", "fonts", "fuente-historia.ttf")
-        self.historia = pg.font.Font(fuente_historia, 15)
+        self.titulo = pg.font.Font(fuente_titulo, 27)
 
         fuente_extra = os.path.join(
             "resources", "fonts", "fuente-extra.ttf")
-        self.extra = pg.font.Font(fuente_extra, 32)
+        self.extra = pg.font.Font(fuente_extra, 40)
 
         # TODO: Revisar esta parte: TONY explica que no es necesario poner todo lo anterior, se puede simplificar así
         self.extra_peque = pg.font.Font(fuente_extra, 25)
@@ -186,6 +182,7 @@ class Pantalla_Instrucciones(Pantalla):
             self.pintar_fondo()
             self.pintar_texto_iniciar()
             self.pintar_texto_musica()
+            self.pintar_texto_instrucciones()
             pg.display.flip()
         return False
 
@@ -196,11 +193,27 @@ class Pantalla_Instrucciones(Pantalla):
 
     def pintar_texto_iniciar(self):
         mensaje = "Pulsa <b> para volver a la pantalla de inicio"
-        texto = self.titulo.render(mensaje, True, (COLOR_BLANCO))
+        texto = self.titulo.render(mensaje, True, (COLOR_AMARILLO))
         anchura_texto = texto.get_width()
         pos_x = (ANCHO_PANTALLA - anchura_texto) / 2
-        pos_y = ALTO_PANTALLA * 5/8
+        pos_y = ALTO_PANTALLA - 100
         self.pantalla.blit(texto, (pos_x, pos_y))
+
+    def pintar_texto_instrucciones(self):
+
+        lugar_pantalla = [200, 240]
+        instrucciones = ["Pulsa <flecha arriba> para subir la nave.",
+                         "Pulsa <flecha abajo> para bajar la nave."]
+
+        pos_x = ANCHO_PANTALLA - 1150
+        contador_lugar = 0
+
+        for instruccion in instrucciones:
+            texto_render = self.extra.render(
+                (instruccion), True, COLOR_ROJO)
+            self.pantalla.blit(
+                texto_render, (pos_x, lugar_pantalla[contador_lugar]))
+            contador_lugar += 1
 
     def pintar_texto_musica(self):
         mensaje = "Pulsa <a> para pausar/reaundar la música"
@@ -212,7 +225,8 @@ class Pantalla_Instrucciones(Pantalla):
 
     def musica_fondo(self):
         pg.mixer.init()
-        musica_fondo = os.path.join("resources", "sounds", "musica_intro.mp3")
+        musica_fondo = os.path.join(
+            "resources", "sounds", "musica_instrucciones.mp3")
         pg.mixer.music.load(musica_fondo)
         pg.mixer.music.set_volume(0.75)
         pg.mixer.music.play(-1, 0.0)
