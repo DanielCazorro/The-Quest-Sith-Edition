@@ -163,6 +163,7 @@ class Pantalla_Instrucciones(Pantalla):
                         pg.mixer.music.stop()
                     else:
                         pg.mixer_music.play(-1, 0.0)
+
             self.pantalla.fill((99, 0, 0))
             self.pintar_fondo()
             self.pintar_texto_iniciar()
@@ -220,6 +221,8 @@ class Pantalla_Instrucciones(Pantalla):
 
 class Pantalla_Historia(Pantalla):
 
+    # FIXME: Hay un fallo al intentar salir del juego desde esta pantalla, no funciona
+
     def __init__(self, pantalla: pg.Surface):
 
         super().__init__(pantalla)
@@ -231,24 +234,42 @@ class Pantalla_Historia(Pantalla):
 
         super().bucle_principal()
         salir = False
+        self.musica_fondo()
 
         while not salir:
+
             for event in pg.event.get():
                 if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
                     return "SALIR"
+                if event.type == pg.KEYDOWN and event.key == pg.K_b:
+                    return "B"
+
+                if event.type == pg.KEYDOWN and event.key == pg.K_a:  # ESTO SIRVE PARA PARAR LA MUSICA PULSANDO A
+                    if pg.mixer.music.get_busy():
+                        pg.mixer.music.stop()
+                    else:
+                        pg.mixer_music.play(-1, 0.0)
+
             self.pantalla.fill((99, 0, 0))
             self.pintar_fondo()
-            # self.pintar_texto_iniciar()
-            # self.pintar_texto_inicio_controles()
+            self.pintar_texto_iniciar()
+            self.pintar_texto_musica()
             # self.pintar_texto_inicio_historia()
             # self.pintar_logo()
             self.pintar_historia()
             pg.display.flip()
-
         return False
 
+    def musica_fondo(self):
+        pg.mixer.init()
+        musica_fondo = os.path.join(
+            "resources", "sounds", "musica_historia.mp3")
+        pg.mixer.music.load(musica_fondo)
+        pg.mixer.music.set_volume(0.75)
+        pg.mixer.music.play(-1, 0.0)
+
     def pintar_fondo(self):
-        # FIXME: Aquí sería mejor poner la ruta de la imagen???? En lugar de ponerla como variable general en la clase?
+
         self.pantalla.fill((0, 0, 99))
         self.pantalla.blit(self.pantalla_historia, (0, 0))
 
@@ -261,6 +282,23 @@ class Pantalla_Historia(Pantalla):
                   "Los Sith. Caballeros nobles y poderosos que luchaban por el orden.",
                   "Nuestra historia sigue a un gran caballero Sith,",
                   "Que busca sin descanso a los malvados Jedi por los planetas de la galaxia."]
+
+    def pintar_texto_iniciar(self):
+        mensaje = "Pulsa <B> para volver a la pantalla de inicio"
+        texto = self.titulo_instrucciones.render(
+            mensaje, True, (COLOR_AMARILLO))
+        anchura_texto = texto.get_width()
+        pos_x = (ANCHO_PANTALLA - anchura_texto) / 2
+        pos_y = ALTO_PANTALLA - 100
+        self.pantalla.blit(texto, (pos_x, pos_y))
+
+    def pintar_texto_musica(self):
+        mensaje = "Pulsa <a> para pausar/reaundar la música"
+        texto = self.extra_musica.render(mensaje, False, (COLOR_AMARILLO))
+        anchura_texto = texto.get_width()
+        pos_x = ANCHO_PANTALLA - (anchura_texto + 20)
+        pos_y = ALTO_PANTALLA * 1/28
+        self.pantalla.blit(texto, (pos_x, pos_y))
 
 
 class Pantalla_Jugar(Pantalla):

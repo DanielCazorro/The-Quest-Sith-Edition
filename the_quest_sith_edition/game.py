@@ -81,5 +81,8 @@ class The_Quest:
             if pantalla_actual == Historia:
                 if resultado_bucle == "SALIR":
                     pantalla_actual == "SALIR"
+                if resultado_bucle == "B":
+                    pantalla_actual = Inicio
+                    
         pg.quit
         return
