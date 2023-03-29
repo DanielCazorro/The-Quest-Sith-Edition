@@ -20,7 +20,7 @@ class Pantalla:
 
         fuente_historia = os.path.join(
             "resources", "fonts", "fuente-historia.ttf")
-        self.historia = pg.font.Font(fuente_historia, 15)
+        self.historia = pg.font.Font(fuente_historia, 35)
 
         fuente_extra = os.path.join(
             "resources", "fonts", "fuente-extra.ttf")
@@ -254,8 +254,7 @@ class Pantalla_Historia(Pantalla):
             self.pintar_fondo()
             self.pintar_texto_iniciar()
             self.pintar_texto_musica()
-            # self.pintar_texto_inicio_historia()
-            # self.pintar_logo()
+            self.pintar_historia()
             self.pintar_historia()
             pg.display.flip()
         return False
@@ -274,14 +273,25 @@ class Pantalla_Historia(Pantalla):
         self.pantalla.blit(self.pantalla_historia, (0, 0))
 
     def pintar_historia(self):
-        # FIXME:Probar a hacer varias frases en una lista, y con un bucle for irlos poniendo en posiciones
+
         # TODO: Pensar en hacer un bucle o algo para que aparezcan de una en una las frases
+        lugar_pantalla = [140, 200, 260, 320, 380, 440]
         frases = ["Hace mucho tiempo, en una galaxia lejana...",
                   "El terror y la anarquía reinaban en todas partes.",
                   "Por  suerte, surgieron unos héroes, que lucharon por la libertad...",
                   "Los Sith. Caballeros nobles y poderosos que luchaban por el orden.",
                   "Nuestra historia sigue a un gran caballero Sith,",
                   "Que busca sin descanso a los malvados Jedi por los planetas de la galaxia."]
+
+        pos_x = ANCHO_PANTALLA - 1200
+        contador_lugar = 0
+
+        for frase in frases:
+            texto_render = self.historia.render(
+                (frase), True, COLOR_ROJO)
+            self.pantalla.blit(
+                texto_render, (pos_x, lugar_pantalla[contador_lugar]))
+            contador_lugar += 1
 
     def pintar_texto_iniciar(self):
         mensaje = "Pulsa <B> para volver a la pantalla de inicio"
