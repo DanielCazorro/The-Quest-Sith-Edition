@@ -80,9 +80,13 @@ class The_Quest:
             # Este es el bucle de elección de la Pantalla_Historia
             if pantalla_actual == Historia:
                 if resultado_bucle == "SALIR":
-                    pantalla_actual == "SALIR"
+                    pantalla_actual = "SALIR"
                 if resultado_bucle == "B":
                     pantalla_actual = Inicio
-                    
+
+            # Este es el bucle de la elección de la Pantalla_Juego
+            if pantalla_actual == Jugar:
+                if resultado_bucle == "SALIR":
+                    pantalla_actual = "SALIR"
         pg.quit
         return

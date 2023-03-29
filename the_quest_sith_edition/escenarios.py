@@ -221,8 +221,6 @@ class Pantalla_Instrucciones(Pantalla):
 
 class Pantalla_Historia(Pantalla):
 
-    # FIXME: Hay un fallo al intentar salir del juego desde esta pantalla, no funciona
-
     def __init__(self, pantalla: pg.Surface):
 
         super().__init__(pantalla)
@@ -313,21 +311,20 @@ class Pantalla_Historia(Pantalla):
 
 class Pantalla_Jugar(Pantalla):
     def __init__(self, pantalla):
-        super().__init__(pantalla)
 
+        super().__init__(pantalla)
         self.jugador = Nave()
+        self.musica_fondo()
 
     def bucle_principal(self):
         salir = False
-        inicio = False
         while not salir:
             for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    return True
+                if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
+                    return "SALIR"
                 if event.type == pg.KEYDOWN and event.key == pg.K_b:
                     inicio = True
-                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                    salir = True
+
             # self.pantalla.fill((99, 0, 0))
             self.pintar_fondo()
             # self.pintar_texto_iniciar()
@@ -338,13 +335,12 @@ class Pantalla_Jugar(Pantalla):
             self.jugador.update()
             self.pantalla.blit(self.jugador.image, self.jugador.rect)
 
-        # # FIXME: Elegir aquí la otra imagen y la letra correcta
-        # fuente1 = os.path.join("resources", "fonts",
-        #                        "PressStart2P-Regular.ttf")
-        # self.titulo = pg.font.Font(fuente1, 40)
-
-        # imagen_inicio = os.path.join("resources", "images", "Andor_galaxy.jpg")
-        # self.logo = pg.image.load(imagen_inicio)
+    def musica_fondo(self):
+        pg.mixer.init()
+        musica_fondo = os.path.join("resources", "sounds", "musica_juego.mp3")
+        pg.mixer.music.load(musica_fondo)
+        pg.mixer.music.set_volume(0.75)
+        pg.mixer.music.play(-1, 0.0)
 
 
 class Pantalla_Puntuacion(Pantalla):
