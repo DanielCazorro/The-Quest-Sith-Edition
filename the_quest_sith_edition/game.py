@@ -47,11 +47,27 @@ class The_Quest:
     #         pg.quit
 
     def jugando(self):
-        print("Estoy en el bucle principal")
-        acabado = self.pantalla.bucle_principal()
-        while self.pantallas[1]:
-            print("Pantalla0")
-            if acabado:
-                self.pantalla == self.pantallas[2].bucle_principal()
-            else:
-                self.pantalla == self.pantallas[2].bucle_principal()
+        actual = 0
+        Pantalla = 0
+        Inicio = 1
+        Instrucciones = 2
+        Historia = 3
+        Jugar = 4
+        Puntuacion = 5
+
+        while actual != "SALIR":
+            res = self.pantallas[actual].bucle_principal()
+
+            if actual == 0:
+                if res == True:
+                    actual = 1
+                else:
+                    actual = 1
+
+            if actual == 1:
+                if res == "s":
+                    print("He pasado por primera elección")
+                    actual = 2
+                if res == "o":
+                    print("He pasado por segunda elección")
+                    actual = 3

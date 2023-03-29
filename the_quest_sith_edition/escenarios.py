@@ -58,7 +58,9 @@ class Pantalla_Inicio(Pantalla):
                 if event.type == pg.QUIT:
                     return True
                 if event.type == pg.KEYDOWN and event.key == pg.K_s:
-                    salir = True
+                    return "s"
+                if event.type == pg.KEYDOWN and event.key == pg.K_o:
+                    return "o"
                 """
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                     break                    
