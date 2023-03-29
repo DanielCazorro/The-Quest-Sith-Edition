@@ -44,28 +44,21 @@ class Pantalla_Inicio(Pantalla):
         self.logo_sith = pg.image.load(logo_sith)
 
     def bucle_principal(self):
-        """
-        Devuelve True si hay que finalizar el programa
-        Devuelve False si hay que pasar a la siguiente escena
-        """
-
-        # TODO: Hay que hacer que al pulsar la tecla s cambie a la pantalla historia, pero que si se pulsa espacio cambie al juego. Seguir investigando por ahora
+        # TODO: Hacer todos los return con upper para que no haya problemas
         super().bucle_principal()
         salir = False
         self.musica_fondo()
         while not salir:
             for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    return True
-                if event.type == pg.KEYDOWN and event.key == pg.K_s:
-                    return "s"
-                if event.type == pg.KEYDOWN and event.key == pg.K_o:
-                    return "o"
-                """
+                if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
+                    return "SALIR"
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                    break                    
-                ESTA PARTE SEGURAMENTE VAYA COMO HA EXPLICADO TONI EN EL BUCLE PRINCIPAL
-                """
+                    return "S"
+                if event.type == pg.KEYDOWN and event.key == pg.K_h:
+                    return "H".upper()
+                if event.type == pg.KEYDOWN and event.key == pg.K_c:
+                    return "C".upper()
+
                 if event.type == pg.KEYDOWN and event.key == pg.K_a:  # ESTO SIRVE PARA PARAR LA MUSICA PULSANDO A
                     if pg.mixer.music.get_busy():
                         pg.mixer.music.stop()
@@ -103,7 +96,7 @@ class Pantalla_Inicio(Pantalla):
         self.pantalla.blit(texto, (pos_x, pos_y))
 
     def pintar_texto_inicio_historia(self):
-        mensaje = "Pulsa <s> para adentrarte en el lado oscuro y conocer todos sus secretos"
+        mensaje = "Pulsa <H> para adentrarte en el lado oscuro y conocer todos sus secretos"
         texto = self.extra.render(mensaje, False, (COLOR_AMARILLO))
         anchura_texto = texto.get_width()
         pos_x = (ANCHO_PANTALLA - anchura_texto) / 2
@@ -112,7 +105,7 @@ class Pantalla_Inicio(Pantalla):
 
     def pintar_texto_inicio_controles(self):
 
-        mensaje = "Pulsa <i> para ver los controles"
+        mensaje = "Pulsa <C> para ver los controles"
         texto = self.extra_peque.render(mensaje, False, (COLOR_AMARILLO))
         anchura_texto = texto.get_width()
         pos_x = (ANCHO_PANTALLA - anchura_texto) / 40

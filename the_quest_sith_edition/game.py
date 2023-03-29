@@ -1,6 +1,3 @@
-"""
-Este será el archivo donde va el juego en sí, es decir la clase del juego, con su constructor y su función principal de juego
-"""
 import os
 import ctypes
 import pygame as pg
@@ -36,7 +33,41 @@ class The_Quest:
             Pantalla_Jugar(self.pantalla),
             Pantalla_Puntuacion(self.pantalla)]
 
-    # def jugando(self):
+    def jugando(self):
+
+        pantalla_actual = 0
+        Pantalla = 0
+        Inicio = 1
+        Instrucciones = 2
+        Historia = 3
+        Jugar = 4
+        Puntuacion = 5
+
+        while pantalla_actual != "SALIR":
+            resultado_bucle = self.pantallas[pantalla_actual].bucle_principal()
+
+            if pantalla_actual == Pantalla:
+                if resultado_bucle == True:
+                    pantalla_actual = Inicio
+                else:
+                    pantalla_actual = Inicio
+
+            if pantalla_actual == 1:
+                if resultado_bucle == "S":
+                    print("He pasado por primera elección: Jugar")
+                    pantalla_actual = Jugar
+                if resultado_bucle == "H":
+                    print("He pasado por segunda elección: Historia")
+                    pantalla_actual = Historia
+                if resultado_bucle == "C":
+                    print("He pasado por la tercera elección: Instrucciones")
+                    pantalla_actual = Instrucciones
+            if pantalla_actual == "SALIR":
+                break
+        pg.quit
+        return
+
+        # def jugando(self):
     #     print("Estoy en el bucle principal")
     #     # Aquí va el bucle principal
     #     for escena in self.pantallas:
@@ -45,29 +76,3 @@ class The_Quest:
     #             break
     #         print("He acabado el for")
     #         pg.quit
-
-    def jugando(self):
-        actual = 0
-        Pantalla = 0
-        Inicio = 1
-        Instrucciones = 2
-        Historia = 3
-        Jugar = 4
-        Puntuacion = 5
-
-        while actual != "SALIR":
-            res = self.pantallas[actual].bucle_principal()
-
-            if actual == 0:
-                if res == True:
-                    actual = 1
-                else:
-                    actual = 1
-
-            if actual == 1:
-                if res == "s":
-                    print("He pasado por primera elección")
-                    actual = 2
-                if res == "o":
-                    print("He pasado por segunda elección")
-                    actual = 3
