@@ -46,13 +46,15 @@ class The_Quest:
         while pantalla_actual != "SALIR":
             resultado_bucle = self.pantallas[pantalla_actual].bucle_principal()
 
+            # Estas es el bucle de elección de Pantalal
             if pantalla_actual == Pantalla:
                 if resultado_bucle == True:
                     pantalla_actual = Inicio
                 else:
                     pantalla_actual = Inicio
 
-            if pantalla_actual == 1:
+            # Este es el bucle de elección de Pantalla_Inicio
+            if pantalla_actual == Inicio:
                 if resultado_bucle == "S":
                     print("He pasado por primera elección: Jugar")
                     pantalla_actual = Jugar
@@ -62,6 +64,11 @@ class The_Quest:
                 if resultado_bucle == "C":
                     print("He pasado por la tercera elección: Instrucciones")
                     pantalla_actual = Instrucciones
+                if resultado_bucle == "R":
+                    print("Cambiamos a pantalla records")
+                    pantalla_actual = Puntuacion
+                if resultado_bucle == "SALIR":
+                    pantalla_actual = "SALIR"
             if pantalla_actual == "SALIR":
                 break
         pg.quit

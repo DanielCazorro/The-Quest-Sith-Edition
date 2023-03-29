@@ -33,8 +33,9 @@ class Pantalla_Inicio(Pantalla):
             "resources", "fonts", "fuente-extra.ttf")
         self.extra = pg.font.Font(fuente_extra, 32)
 
-        # TODO: Revisar esta parte: TONY explica que no es necesario poner todo lo anterior, se puede simplificar así
         self.extra_peque = pg.font.Font(fuente_extra, 25)
+
+        self.extra_musica = pg.font.Font(fuente_extra, 22)
 
         imagen_inicio = os.path.join(
             "resources", "images", "fondo_pantalla_inicio.jpg")
@@ -44,20 +45,23 @@ class Pantalla_Inicio(Pantalla):
         self.logo_sith = pg.image.load(logo_sith)
 
     def bucle_principal(self):
-        # TODO: Hacer todos los return con upper para que no haya problemas
+
         super().bucle_principal()
         salir = False
         self.musica_fondo()
         while not salir:
+            print(pg.time.get_ticks())
             for event in pg.event.get():
                 if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
                     return "SALIR"
                 if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                     return "S"
                 if event.type == pg.KEYDOWN and event.key == pg.K_h:
-                    return "H".upper()
+                    return "H"
                 if event.type == pg.KEYDOWN and event.key == pg.K_c:
-                    return "C".upper()
+                    return "C"
+                if pg.time.get_ticks() > 5000:
+                    return "R"
 
                 if event.type == pg.KEYDOWN and event.key == pg.K_a:  # ESTO SIRVE PARA PARAR LA MUSICA PULSANDO A
                     if pg.mixer.music.get_busy():
@@ -89,7 +93,7 @@ class Pantalla_Inicio(Pantalla):
 
     def pintar_texto_musica(self):
         mensaje = "Pulsa <a> para pausar/reaundar la música"
-        texto = self.extra_peque.render(mensaje, False, (COLOR_AMARILLO))
+        texto = self.extra_musica.render(mensaje, False, (COLOR_AMARILLO))
         anchura_texto = texto.get_width()
         pos_x = ANCHO_PANTALLA - (anchura_texto + 20)
         pos_y = ALTO_PANTALLA * 1/28
