@@ -74,16 +74,12 @@ class The_Quest:
             if pantalla_actual == Instrucciones:
                 if resultado_bucle == "SALIR":
                     pantalla_actual = "SALIR"
+                if resultado_bucle == "B":
+                    pantalla_actual = Inicio
 
+            # Este es el bucle de elección de la Pantalla_Historia
+            if pantalla_actual == Historia:
+                if resultado_bucle == "SALIR":
+                    pantalla_actual == "SALIR"
         pg.quit
         return
-
-        # def jugando(self):
-    #     print("Estoy en el bucle principal")
-    #     # Aquí va el bucle principal
-    #     for escena in self.pantallas:
-    #         he_acabado = escena.bucle_principal()
-    #         if he_acabado:
-    #             break
-    #         print("He acabado el for")
-    #         pg.quit

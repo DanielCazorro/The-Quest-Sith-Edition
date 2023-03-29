@@ -1,7 +1,7 @@
 import os
 import pygame as pg
 
-from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA, COLOR_AMARILLO, COLOR_BLANCO, COLOR_ROJO, FPS
+from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA, COLOR_AMARILLO, COLOR_BLANCO, COLOR_NEGRO, COLOR_ROJO, FPS
 from .objects import Nave, Asteroides
 
 
@@ -15,6 +15,8 @@ class Pantalla:
         fuente_titulo = os.path.join(
             "resources", "fonts", "fuente-titulo.ttf")
         self.titulo = pg.font.Font(fuente_titulo, 30)
+
+        self.titulo_instrucciones = pg.font.Font(fuente_titulo, 25)
 
         fuente_historia = os.path.join(
             "resources", "fonts", "fuente-historia.ttf")
@@ -133,6 +135,8 @@ class Pantalla_Inicio(Pantalla):
 
 class Pantalla_Instrucciones(Pantalla):
 
+    # TODO: Corregir color para que se vea bien el texto
+
     def __init__(self, pantalla: pg.Surface):
         super().__init__(pantalla)
 
@@ -147,16 +151,13 @@ class Pantalla_Instrucciones(Pantalla):
         self.musica_fondo()
 
         while not salir:
+
             for event in pg.event.get():
                 if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
                     return "SALIR"
                 if event.type == pg.KEYDOWN and event.key == pg.K_b:
-                    salir = True
-                """
-                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                    break                    
-                ESTA PARTE SEGURAMENTE VAYA COMO HA EXPLICADO TONI EN EL BUCLE PRINCIPAL
-                """
+                    return "B"
+
                 if event.type == pg.KEYDOWN and event.key == pg.K_a:  # ESTO SIRVE PARA PARAR LA MUSICA PULSANDO A
                     if pg.mixer.music.get_busy():
                         pg.mixer.music.stop()
@@ -176,8 +177,9 @@ class Pantalla_Instrucciones(Pantalla):
         self.pantalla.blit(self.pantalla_inicio, (0, 0))
 
     def pintar_texto_iniciar(self):
-        mensaje = "Pulsa <b> para volver a la pantalla de inicio"
-        texto = self.titulo.render(mensaje, True, (COLOR_AMARILLO))
+        mensaje = "Pulsa <B> para volver a la pantalla de inicio"
+        texto = self.titulo_instrucciones.render(
+            mensaje, True, (COLOR_AMARILLO))
         anchura_texto = texto.get_width()
         pos_x = (ANCHO_PANTALLA - anchura_texto) / 2
         pos_y = ALTO_PANTALLA - 100
@@ -185,9 +187,9 @@ class Pantalla_Instrucciones(Pantalla):
 
     def pintar_texto_instrucciones(self):
 
-        lugar_pantalla = [200, 240]
-        instrucciones = ["Pulsa <flecha arriba> para subir la nave.",
-                         "Pulsa <flecha abajo> para bajar la nave."]
+        lugar_pantalla = [220, 280]
+        instrucciones = ["--> Pulsa <flecha arriba> para subir la nave",
+                         "--> Pulsa <flecha abajo> para bajar la nave"]
 
         pos_x = ANCHO_PANTALLA - 1150
         contador_lugar = 0
@@ -201,7 +203,7 @@ class Pantalla_Instrucciones(Pantalla):
 
     def pintar_texto_musica(self):
         mensaje = "Pulsa <a> para pausar/reaundar la música"
-        texto = self.extra_peque.render(mensaje, False, (COLOR_AMARILLO))
+        texto = self.extra_musica.render(mensaje, False, (COLOR_AMARILLO))
         anchura_texto = texto.get_width()
         pos_x = ANCHO_PANTALLA - (anchura_texto + 20)
         pos_y = ALTO_PANTALLA * 1/28
@@ -219,46 +221,22 @@ class Pantalla_Instrucciones(Pantalla):
 class Pantalla_Historia(Pantalla):
 
     def __init__(self, pantalla: pg.Surface):
+
         super().__init__(pantalla)
-
-        fuente_titulo = os.path.join(
-            "resources", "fonts", "fuente-titulo.ttf")
-        self.titulo = pg.font.Font(fuente_titulo, 25)
-
-        fuente_historia = os.path.join(
-            "resources", "fonts", "fuente-historia.ttf")
-        self.historia = pg.font.Font(fuente_historia, 20)
-
-        fuente_extra = os.path.join(
-            "resources", "fonts", "fuente-extra.ttf")
-        self.extra = pg.font.Font(fuente_extra, 37)
-
-        # FIXME: PREGUNTAR AQUÍ SI HAY ALGÚN MÉTODO PARA CAMBIAR EL TAMAÑO DE LA LETRA DESDE LA FUNCIÓN PARA NO TENER QUE COPIAR Y PEGAR VARIAS VECES (REPETIDO)
-        fuente_extra_peque = os.path.join(
-            "resources", "fonts", "fuente-extra.ttf")
-        self.extra_peque = pg.font.Font(fuente_extra_peque, 25)
-
         imagen_historia = os.path.join(
             "resources", "images", "fondo_pantalla_historia.jpg")
         self.pantalla_historia = pg.image.load(imagen_historia)
 
     def bucle_principal(self):
-        """
-        Devuelve True si hay que finalizar el programa
-        Devuelve False si hay que pasar a la siguiente escena
-        """
+
         super().bucle_principal()
         salir = False
-        inicio = False
+
         while not salir:
             for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    return True
-                if event.type == pg.KEYDOWN and event.key == pg.K_b:
-                    inicio = True
-                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                    salir = True
-            # self.pantalla.fill((99, 0, 0))
+                if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
+                    return "SALIR"
+            self.pantalla.fill((99, 0, 0))
             self.pintar_fondo()
             # self.pintar_texto_iniciar()
             # self.pintar_texto_inicio_controles()
@@ -267,10 +245,6 @@ class Pantalla_Historia(Pantalla):
             self.pintar_historia()
             pg.display.flip()
 
-            # Si pulso b, se que paso por aquí. Ahora hay que intentar que al pasar por aquí haya una condición (junto con el bucle principal de game.py) para que pase a a la escena
-            if inicio == True:
-                print("Pasando por pantalla inicio")
-                return Pantalla_Inicio(Pantalla)
         return False
 
     def pintar_fondo(self):
