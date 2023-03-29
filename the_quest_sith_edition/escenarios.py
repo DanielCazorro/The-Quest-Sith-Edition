@@ -11,16 +11,7 @@ class Pantalla:
         self.pantalla = pantalla
         self.reloj = pg.time.Clock()
 
-    def bucle_principal(self):
-        pass
-
-
-class Pantalla_Inicio(Pantalla):
-
-    def __init__(self, pantalla: pg.Surface):
-        super().__init__(pantalla)
-
-        # TODO:  COMO LAS FUENTES SE REPITEN, SACARLAS A LA CLASE PANTALLA PARA LLAMARLAS Y NO ESTAR COPIA-PEGA
+        # Aquí van las fuentes generales
         fuente_titulo = os.path.join(
             "resources", "fonts", "fuente-titulo.ttf")
         self.titulo = pg.font.Font(fuente_titulo, 30)
@@ -37,6 +28,15 @@ class Pantalla_Inicio(Pantalla):
 
         self.extra_musica = pg.font.Font(fuente_extra, 22)
 
+    def bucle_principal(self):
+        pass
+
+
+class Pantalla_Inicio(Pantalla):
+
+    def __init__(self, pantalla: pg.Surface):
+        super().__init__(pantalla)
+
         imagen_inicio = os.path.join(
             "resources", "images", "fondo_pantalla_inicio.jpg")
         self.pantalla_inicio = pg.image.load(imagen_inicio)
@@ -49,6 +49,7 @@ class Pantalla_Inicio(Pantalla):
         super().bucle_principal()
         salir = False
         self.musica_fondo()
+
         while not salir:
             print(pg.time.get_ticks())
             for event in pg.event.get():
@@ -60,7 +61,7 @@ class Pantalla_Inicio(Pantalla):
                     return "H"
                 if event.type == pg.KEYDOWN and event.key == pg.K_c:
                     return "C"
-                if pg.time.get_ticks() > 5000:
+                if pg.time.get_ticks() > 500000000:  # TODO: Cambiar este número a algo mas normal
                     return "R"
 
                 if event.type == pg.KEYDOWN and event.key == pg.K_a:  # ESTO SIRVE PARA PARAR LA MUSICA PULSANDO A
@@ -101,7 +102,7 @@ class Pantalla_Inicio(Pantalla):
 
     def pintar_texto_inicio_historia(self):
         mensaje = "Pulsa <H> para adentrarte en el lado oscuro y conocer todos sus secretos"
-        texto = self.extra.render(mensaje, False, (COLOR_AMARILLO))
+        texto = self.extra.render(mensaje, False, (COLOR_ROJO))
         anchura_texto = texto.get_width()
         pos_x = (ANCHO_PANTALLA - anchura_texto) / 2
         pos_y = ALTO_PANTALLA * 6/8
@@ -135,36 +136,20 @@ class Pantalla_Instrucciones(Pantalla):
     def __init__(self, pantalla: pg.Surface):
         super().__init__(pantalla)
 
-        # TODO:  COMO LAS FUENTES SE REPITEN, SACARLAS A LA CLASE PANTALLA PARA LLAMARLAS Y NO ESTAR COPIA-PEGA
-        fuente_titulo = os.path.join(
-            "resources", "fonts", "fuente-titulo.ttf")
-        self.titulo = pg.font.Font(fuente_titulo, 27)
-
-        fuente_extra = os.path.join(
-            "resources", "fonts", "fuente-extra.ttf")
-        self.extra = pg.font.Font(fuente_extra, 40)
-
-        # TODO: Revisar esta parte: TONY explica que no es necesario poner todo lo anterior, se puede simplificar así
-        self.extra_peque = pg.font.Font(fuente_extra, 25)
-
         imagen_inicio = os.path.join(
             "resources", "images", "fondo_pantalla_instrucciones.jpg")
         self.pantalla_inicio = pg.image.load(imagen_inicio)
 
     def bucle_principal(self):
-        """
-        Devuelve True si hay que finalizar el programa
-        Devuelve False si hay que pasar a la siguiente escena
-        """
 
-        # TODO: Hay que hacer que al pulsar la tecla s cambie a la pantalla historia, pero que si se pulsa espacio cambie al juego. Seguir investigando por ahora
         super().bucle_principal()
         salir = False
         self.musica_fondo()
+
         while not salir:
             for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    return True
+                if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
+                    return "SALIR"
                 if event.type == pg.KEYDOWN and event.key == pg.K_b:
                     salir = True
                 """
