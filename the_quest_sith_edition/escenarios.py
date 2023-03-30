@@ -314,7 +314,8 @@ class Pantalla_Jugar(Pantalla):
     def __init__(self, pantalla):
 
         super().__init__(pantalla)
-        self.jugador = Nave()
+
+        self.nave = Nave()
         imagen_jugar = os.path.join(
             "resources", "images", "fondo_pantalla_jugar.jpg")
         self.pantalla_jugar = pg.image.load(imagen_jugar)
@@ -337,9 +338,9 @@ class Pantalla_Jugar(Pantalla):
                         pg.mixer_music.play(-1, 0.0)
 
             self.pantalla.fill((99, 0, 0))
-            # self.jugador()
-            self.pantalla.blit(self.jugador.image, self.jugador.rect)
-            self.jugador.update()
+            self.pantalla.blit(self.nave.image, self.nave.rect)
+
+            self.nave.update()
             self.pintar_fondo()
 
             # self.pintar_texto_iniciar()
