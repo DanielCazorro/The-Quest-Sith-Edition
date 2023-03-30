@@ -5,7 +5,7 @@ from pygame.sprite import Sprite
 from . import ANCHO_PANTALLA, ALTO_PANTALLA, FPS
 
 
-class Nave():
+class Nave(Sprite):
 
     margen = 10
     velocidad = 1

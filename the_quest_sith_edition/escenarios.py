@@ -337,15 +337,18 @@ class Pantalla_Jugar(Pantalla):
                         pg.mixer_music.play(-1, 0.0)
 
             self.pantalla.fill((99, 0, 0))
+            # self.jugador()
+            self.pantalla.blit(self.jugador.image, self.jugador.rect)
+            self.jugador.update()
             self.pintar_fondo()
-            self.jugador()
+
             # self.pintar_texto_iniciar()
             # self.pintar_texto_inicio_controles()
             # self.pintar_texto_inicio_historia()
             self.pintar_texto_musica()
             pg.display.flip()
-            self.jugador.update()
-            self.pantalla.blit(self.jugador.image, self.jugador.rect)
+
+        return False
 
     def pintar_fondo(self):
 
