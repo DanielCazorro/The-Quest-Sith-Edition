@@ -1,6 +1,3 @@
-"""
-Aquí crearemos las clases de los objetos, como los asteroides y la nave
-"""
 import os
 import pygame as pg
 from pygame.sprite import Sprite
@@ -9,9 +6,7 @@ from . import ANCHO_PANTALLA, ALTO_PANTALLA, FPS
 
 
 class Nave():
-    """
-    Esta clase será para la nave principal
-    """
+
     margen = 10
     velocidad = 1
 

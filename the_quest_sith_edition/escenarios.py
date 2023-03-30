@@ -310,30 +310,47 @@ class Pantalla_Historia(Pantalla):
 
 
 class Pantalla_Jugar(Pantalla):
+
     def __init__(self, pantalla):
 
         super().__init__(pantalla)
         self.jugador = Nave()
-        self.musica_fondo()
+        imagen_jugar = os.path.join(
+            "resources", "images", "fondo_pantalla_jugar.jpg")
+        self.pantalla_jugar = pg.image.load(imagen_jugar)
 
     def bucle_principal(self):
+
+        super().bucle_principal()
         salir = False
+        self.musica_fondo()
+
         while not salir:
             for event in pg.event.get():
                 if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
                     return "SALIR"
-                if event.type == pg.KEYDOWN and event.key == pg.K_b:
-                    inicio = True
 
-            # self.pantalla.fill((99, 0, 0))
+                if event.type == pg.KEYDOWN and event.key == pg.K_a:  # ESTO SIRVE PARA PARAR LA MUSICA PULSANDO A
+                    if pg.mixer.music.get_busy():
+                        pg.mixer.music.stop()
+                    else:
+                        pg.mixer_music.play(-1, 0.0)
+
+            self.pantalla.fill((99, 0, 0))
             self.pintar_fondo()
+            self.jugador()
             # self.pintar_texto_iniciar()
             # self.pintar_texto_inicio_controles()
             # self.pintar_texto_inicio_historia()
-            # self.pintar_logo()
+            self.pintar_texto_musica()
             pg.display.flip()
             self.jugador.update()
             self.pantalla.blit(self.jugador.image, self.jugador.rect)
+
+    def pintar_fondo(self):
+
+        self.pantalla.fill((0, 0, 99))
+        self.pantalla.blit(self.pantalla_jugar, (0, 0))
 
     def musica_fondo(self):
         pg.mixer.init()
@@ -341,6 +358,14 @@ class Pantalla_Jugar(Pantalla):
         pg.mixer.music.load(musica_fondo)
         pg.mixer.music.set_volume(0.75)
         pg.mixer.music.play(-1, 0.0)
+
+    def pintar_texto_musica(self):
+        mensaje = "Pulsa <a> para pausar/reaundar la música"
+        texto = self.extra_musica.render(mensaje, False, (COLOR_AMARILLO))
+        anchura_texto = texto.get_width()
+        pos_x = ANCHO_PANTALLA - (anchura_texto + 20)
+        pos_y = ALTO_PANTALLA * 1/28
+        self.pantalla.blit(texto, (pos_x, pos_y))
 
 
 class Pantalla_Puntuacion(Pantalla):
