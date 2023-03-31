@@ -27,13 +27,13 @@ class Nave(Sprite):
         if teclas_pulsadas[pg.K_DOWN]:
             print("Mueve abajo")
             self.rect.y += self.velocidad
-            if self.rect.top > ALTO_PANTALLA:
-                self.rect.top = ALTO_PANTALLA
+            if self.rect.bottom > ALTO_PANTALLA:
+                self.rect.bottom = ALTO_PANTALLA
         if teclas_pulsadas[pg.K_UP]:
             print("Mueve arriba")
             self.rect.y -= self.velocidad
-            if self.rect.bottom < 0:
-                self.rect.bottom = 0
+            if self.rect.top < 0:
+                self.rect.top = 0
 
     def aterrizar(self):
         pass
