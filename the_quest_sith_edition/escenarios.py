@@ -340,6 +340,7 @@ class Pantalla_Jugar(Pantalla):
 
             self.pantalla.fill((99, 0, 0))
             self.pintar_fondo()
+            self.movimiento_pantalla()
             self.jugador.update()
             self.pantalla.blit(self.jugador.image, self.jugador.rect)
 
@@ -370,6 +371,8 @@ class Pantalla_Jugar(Pantalla):
         pos_x = ANCHO_PANTALLA - (anchura_texto + 20)
         pos_y = ALTO_PANTALLA * 1/28
         self.pantalla.blit(texto, (pos_x, pos_y))
+
+    def movimiento_pantalla(self):
 
 
 class Pantalla_Puntuacion(Pantalla):
