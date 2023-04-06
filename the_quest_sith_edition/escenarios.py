@@ -316,6 +316,7 @@ class Pantalla_Jugar(Pantalla):
         super().__init__(pantalla)
 
         self.jugador = Nave()
+        self.colocar_asteroides()
 
         imagen_jugar = os.path.join(
             "resources", "images", "fondo_pantalla_jugar.jpg")
@@ -344,9 +345,9 @@ class Pantalla_Jugar(Pantalla):
             self.jugador.update()
             self.pantalla.blit(self.jugador.image, self.jugador.rect)
 
-            # self.pintar_texto_iniciar()
-            # self.pintar_texto_inicio_controles()
-            # self.pintar_texto_inicio_historia()
+            self.asteroides.update()
+            self.asteroides.draw(self.pantalla)
+
             self.pintar_texto_musica()
             pg.display.flip()
 
@@ -373,6 +374,13 @@ class Pantalla_Jugar(Pantalla):
         self.pantalla.blit(texto, (pos_x, pos_y))
 
     def movimiento_pantalla(self):
+        pass
+
+    def colocar_asteroides(self):
+        self.asteroides = pg.sprite.Group()
+        for x in range(5):
+            self.asteroide = Asteroides()
+            self.asteroides.add(self.asteroides)
 
 
 class Pantalla_Puntuacion(Pantalla):

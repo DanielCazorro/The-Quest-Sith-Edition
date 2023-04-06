@@ -55,8 +55,15 @@ class Asteroides(Sprite):
         self.image = pg.image.load(imagen_asteroide)
 
         self.rect = self.image.get_rect()
-        self.rect.y = randrange(0, ALTO_PANTALLA)
-        self.rect.x = ANCHO_PANTALLA
+        self.rect.y -= self.rect.height
+        self.rect.x = (ANCHO_PANTALLA - self.rect.width)
+        self.velocidad_asteroide
+
+    def movimiento(self):
+        self.rect.y += self.velocidad_asteroide
+        if self.rect.top > ALTO_PANTALLA:
+            self.rect.y -= self.rect.height
+            self.rect.x = (ANCHO_PANTALLA - self.rect.width)
 
     def hay_colision(self, otro):
         if self.rect.colliderect(otro):
