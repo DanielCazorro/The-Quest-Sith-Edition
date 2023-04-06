@@ -1,5 +1,6 @@
 import os
 import pygame as pg
+from random import randint
 
 from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA, COLOR_AMARILLO, COLOR_BLANCO, COLOR_NEGRO, COLOR_ROJO, FPS
 from .objects import Nave, Asteroides
@@ -318,10 +319,12 @@ class Pantalla_Jugar(Pantalla):
         self.jugador = Nave()
         # self.colocar_asteroides()
 
+        # self.asteroides = pg.sprite.Group()
+        # for asteroide in range(10):
+        #     self.asteroide = Asteroides()
+        #     self.asteroides.add(self.asteroide)
         self.asteroides = pg.sprite.Group()
-        for asteroide in range(10):
-            self.asteroide = Asteroides()
-            self.asteroides.add(self.asteroide)
+        self.colocar_asteroides(4, 8)
 
         imagen_jugar = os.path.join(
             "resources", "images", "fondo_pantalla_jugar.jpg")
@@ -387,6 +390,12 @@ class Pantalla_Jugar(Pantalla):
     #     for x in range(5):
     #         self.asteroide = Asteroides()
     #         self.asteroides.add(self.asteroides)
+
+    def colocar_asteroides(self, minimo, maximo):
+        numero_asteroides = randint(minimo, maximo)
+        for i in range(numero_asteroides):
+            asteroide = Asteroides()
+            self.asteroides.add(asteroide)
 
 
 class Pantalla_Puntuacion(Pantalla):
