@@ -77,6 +77,7 @@ class Asteroides(Sprite):
         self.velocidad_asteroide = randrange(1, 6)
 
     def movimiento(self):
+
         self.rect.x -= self.velocidad_asteroide
         if self.rect.right < -20:
             self.rect.y = randrange(0, self.margen_asteroide)
