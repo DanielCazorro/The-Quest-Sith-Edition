@@ -44,9 +44,11 @@ class Nave(Sprite):
 
 class Asteroides(Sprite):
 
-    velocidad_asteroide = randrange(1, 3)
+    # velocidad_asteroide = randrange(1, 3) TODO: Quizás sea mejor ponerlo abajo
     # TODO: Aquí intentar hacer un random randint para el tamaño o quizás hacer varios tamaños en variables
-    tam_asteroide = (40, 40)
+    tam_asteroide_pequeño = (40, 40)
+    tam_asteroide_mediano = (55, 55)
+    tam_asteroide_grande = (70, 70)
 
     def __init__(self):
 
@@ -54,16 +56,32 @@ class Asteroides(Sprite):
         imagen_asteroide = os.path.join("resources", "images", "asteroide.png")
         self.image = pg.image.load(imagen_asteroide)
 
+        self.asteroide_aleatorio = randrange(0, 2)
+        if self.asteroide_aleatorio == 0:
+            self.image = pg.transform.scale(
+                self.image, self.tam_asteroide_pequeño)
+            self.radius = 10
+        if self.asteroide_aleatorio == 1:
+            self.image = pg.transform.scale(
+                self.image, self.tam_asteroide_mediano)
+            self.radius = 10
+        if self.asteroide_aleatorio == 2:
+            self.image = pg.transform.scale(
+                self.image, self.tam_asteroide_grande)
+            self.radius = 10
+
         self.rect = self.image.get_rect()
-        self.rect.y -= self.rect.height
-        self.rect.x = (ANCHO_PANTALLA - self.rect.width)
-        self.velocidad_asteroide
+        self.margen_asteroide = (ALTO_PANTALLA - self.rect.height)
+        self.rect.y = randrange(0, self.margen_asteroide)
+        self.rect.x = ANCHO_PANTALLA + self.rect.width
+        self.velocidad_asteroide = randrange(1, 6)
 
     def movimiento(self):
-        self.rect.y += self.velocidad_asteroide
-        if self.rect.top > ALTO_PANTALLA:
-            self.rect.y -= self.rect.height
-            self.rect.x = (ANCHO_PANTALLA - self.rect.width)
+        self.rect.x -= self.velocidad_asteroide
+        if self.rect.right < -20:
+            self.rect.y = randrange(0, self.margen_asteroide)
+            self.rect.x = ANCHO_PANTALLA + self.rect.width
+            self.velocidad_asteroide = randrange(1, 6)
 
     def hay_colision(self, otro):
         if self.rect.colliderect(otro):
