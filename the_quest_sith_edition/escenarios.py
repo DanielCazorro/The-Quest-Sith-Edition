@@ -3,7 +3,7 @@ import pygame as pg
 from random import randint
 
 from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA, COLOR_AMARILLO, COLOR_BLANCO, COLOR_NEGRO, COLOR_ROJO, FPS
-from .objects import Nave, Asteroides
+from .objects import Nave, Meteoritos
 
 
 class Pantalla:
@@ -317,16 +317,10 @@ class Pantalla_Jugar(Pantalla):
         super().__init__(pantalla)
 
         self.jugador = Nave()
-        # self.colocar_asteroides()
-
-        # self.asteroides = pg.sprite.Group()
-        # for asteroide in range(10):
-        #     self.asteroide = Asteroides()
-        #     self.asteroides.add(self.asteroide)
-        self.asteroides = pg.sprite.Group()
-        for i in range(10):
-            self.asteroide = Asteroides()
-            self.asteroides.add(self.asteroide)
+        meteoritos = pg.sprite.Group()
+        for x in range(10):
+            meteorito = Meteoritos()
+            meteoritos.add(meteorito)
 
         imagen_jugar = os.path.join(
             "resources", "images", "fondo_pantalla_jugar.jpg")
@@ -349,12 +343,10 @@ class Pantalla_Jugar(Pantalla):
                     else:
                         pg.mixer_music.play(-1, 0.0)
 
+            self.meteoritos.update()
+            self.meteoritos.draw(self.pantalla)
             self.pantalla.fill((99, 0, 0))
             self.pintar_fondo()
-            self.movimiento_pantalla()
-            self.asteroides.draw(self.pantalla)
-
-            self.movimiento_pantalla()
             self.jugador.update()
             self.pantalla.blit(self.jugador.image, self.jugador.rect)
 
@@ -383,13 +375,13 @@ class Pantalla_Jugar(Pantalla):
         pos_y = ALTO_PANTALLA * 1/28
         self.pantalla.blit(texto, (pos_x, pos_y))
 
-    def movimiento_pantalla(self):
-        x_mover = self.x % self.fondo.get_rect().width
-        self.pantalla.blit(
-            self.fondo, (x_mover - self.fondo.get_rect().width, self.y))
-        if x_mover < ANCHO_PANTALLA:
-            self.pantalla.blit(self.fondo, (x_mover, 0))
-        self.x -= 1
+    # def movimiento_pantalla(self):
+    #     x_mover = self.x % self.fondo.get_rect().width
+    #     self.pantalla.blit(
+    #         self.fondo, (x_mover - self.fondo.get_rect().width, self.y))
+    #     if x_mover < ANCHO_PANTALLA:
+    #         self.pantalla.blit(self.fondo, (x_mover, 0))
+    #     self.x -= 1
 
     # def colocar_asteroides(self):
     #     self.asteroides = pg.sprite.Group()
