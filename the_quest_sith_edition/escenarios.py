@@ -136,8 +136,6 @@ class Pantalla_Inicio(Pantalla):
 
 class Pantalla_Instrucciones(Pantalla):
 
-    # TODO: Corregir color para que se vea bien el texto
-
     def __init__(self, pantalla: pg.Surface):
         super().__init__(pantalla)
 
@@ -317,10 +315,6 @@ class Pantalla_Jugar(Pantalla):
         super().__init__(pantalla)
 
         self.jugador = Nave()
-        meteoritos = pg.sprite.Group()
-        for x in range(10):
-            meteorito = Meteoritos()
-            meteoritos.add(meteorito)
 
         imagen_jugar = os.path.join(
             "resources", "images", "fondo_pantalla_jugar.jpg")
@@ -343,8 +337,6 @@ class Pantalla_Jugar(Pantalla):
                     else:
                         pg.mixer_music.play(-1, 0.0)
 
-            self.meteoritos.update()
-            self.meteoritos.draw(self.pantalla)
             self.pantalla.fill((99, 0, 0))
             self.pintar_fondo()
             self.jugador.update()
@@ -374,27 +366,6 @@ class Pantalla_Jugar(Pantalla):
         pos_x = ANCHO_PANTALLA - (anchura_texto + 20)
         pos_y = ALTO_PANTALLA * 1/28
         self.pantalla.blit(texto, (pos_x, pos_y))
-
-    # def movimiento_pantalla(self):
-    #     x_mover = self.x % self.fondo.get_rect().width
-    #     self.pantalla.blit(
-    #         self.fondo, (x_mover - self.fondo.get_rect().width, self.y))
-    #     if x_mover < ANCHO_PANTALLA:
-    #         self.pantalla.blit(self.fondo, (x_mover, 0))
-    #     self.x -= 1
-
-    # def colocar_asteroides(self):
-    #     self.asteroides = pg.sprite.Group()
-    #     for x in range(5):
-    #         self.asteroide = Asteroides()
-    #         self.asteroides.add(self.asteroides)
-
-    def colocar_asteroides(self, minimo, maximo):
-        numero_asteroides = randint(minimo, maximo)
-        for i in range(numero_asteroides):
-            asteroide = Asteroides()
-            self.asteroides.add(asteroide)
-
 
 class Pantalla_Puntuacion(Pantalla):
     def bucle_principal(self):
