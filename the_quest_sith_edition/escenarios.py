@@ -3,7 +3,7 @@ import pygame as pg
 from random import randint
 
 from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA, COLOR_AMARILLO, COLOR_BLANCO, COLOR_NEGRO, COLOR_ROJO, FPS
-from .objects import Nave, Meteoritos
+from .objects import Nave, Asteroide
 
 
 class Pantalla:
@@ -316,6 +316,13 @@ class Pantalla_Jugar(Pantalla):
 
         self.jugador = Nave()
 
+        self.asteroides = pg.sprite.Group()
+
+        # Aquí podemos cambiar el range a un número mayor para que haya mas asteroides y sea mas difícil
+        for asteroid in range(5):
+            self.asteroide = Asteroide()
+            self.asteroides.add(self.asteroide)
+
         imagen_jugar = os.path.join(
             "resources", "images", "fondo_pantalla_jugar.jpg")
         self.pantalla_jugar = pg.image.load(imagen_jugar)
@@ -340,6 +347,8 @@ class Pantalla_Jugar(Pantalla):
             self.pantalla.fill((99, 0, 0))
             self.pintar_fondo()
             self.jugador.update()
+            self.asteroides.update()
+            self.asteroides.draw(self.pantalla)
             self.pantalla.blit(self.jugador.image, self.jugador.rect)
 
             self.pintar_texto_musica()
@@ -366,6 +375,7 @@ class Pantalla_Jugar(Pantalla):
         pos_x = ANCHO_PANTALLA - (anchura_texto + 20)
         pos_y = ALTO_PANTALLA * 1/28
         self.pantalla.blit(texto, (pos_x, pos_y))
+
 
 class Pantalla_Puntuacion(Pantalla):
     def bucle_principal(self):

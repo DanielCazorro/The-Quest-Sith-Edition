@@ -42,8 +42,44 @@ class Nave(Sprite):
         pass
 
 
-class Asteroides(Sprite):
-    pass
+class Asteroide(Sprite):
+
+    asteroide_s = (50, 50)
+    asteroide_m = (75, 75)
+    asteroide_l = (100, 100)
+
+    def __init__(self):
+        super().__init__()
+
+        imagen_asteroide = os.path.join(
+            "resources", "images", "asteroide.png")
+        self.image = pg.image.load(imagen_asteroide)
+
+        self.asteroide_aleatorio = randrange(0, 3)
+        if self.asteroide_aleatorio == 0:
+            self.image = pg.transform.scale(self.image, self.asteroide_s)
+            self.radius = 25
+        elif self.asteroide_aleatorio == 1:
+            self.image = pg.transform.scale(self.image, self.asteroide_m)
+            self.radius = 37
+        elif self.asteroide_aleatorio == 2:
+            self.image = pg.transform.scale(self.image, self.asteroide_l)
+            self.radius = 50
+
+        self.rect = self.image.get_rect()
+        self.margen_asteroide = (ALTO_PANTALLA - self.rect.height)
+        self.rect.y = randrange(0, self.margen_asteroide)
+        self.rect.x = ANCHO_PANTALLA + self.rect.width
+
+        self.velocidad_x = randrange(1, 3)
+
+    def update(self):
+
+        self.rect.x -= self.velocidad_x
+        if self.rect.right < -10:
+            self.rect.y = randrange(0, self.margen_asteroide)
+            self.rect.x = ANCHO_PANTALLA + self.rect.width
+            self.velocidad_x = randrange(1, 3)
 
 
 class Puntuacion():
