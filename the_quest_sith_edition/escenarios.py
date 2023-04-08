@@ -376,6 +376,10 @@ class Pantalla_Jugar(Pantalla):
         pos_y = ALTO_PANTALLA * 1/28
         self.pantalla.blit(texto, (pos_x, pos_y))
 
+    def choque(self):
+        choque = pg.sprite.spritecollide(self.jugador, self.asteroides, True)
+        print("Choque")
+
 
 class Pantalla_Puntuacion(Pantalla):
     def bucle_principal(self):
