@@ -41,6 +41,11 @@ class Nave(Sprite):
     def aterrizar(self):
         pass
 
+    def hay_colision(self, otro):
+        if self.rect.colliderect(otro):
+            # hay colisión
+            print("Hay colisión")
+
 
 class Asteroide(Sprite):
 

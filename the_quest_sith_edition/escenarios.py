@@ -327,6 +327,13 @@ class Pantalla_Jugar(Pantalla):
             "resources", "images", "fondo_pantalla_jugar.jpg")
         self.pantalla_jugar = pg.image.load(imagen_jugar)
 
+        self.jugador.hay_colision(self.asteroides)
+        golpeados = pg.sprite.spritecollide(
+            self.asteroides,
+            self.jugador,
+            True
+        )
+
     def bucle_principal(self):
 
         super().bucle_principal()
@@ -375,10 +382,6 @@ class Pantalla_Jugar(Pantalla):
         pos_x = ANCHO_PANTALLA - (anchura_texto + 20)
         pos_y = ALTO_PANTALLA * 1/28
         self.pantalla.blit(texto, (pos_x, pos_y))
-
-    def choque(self):
-        choque = pg.sprite.spritecollide(self.jugador, self.asteroides, True)
-        print("Choque")
 
 
 class Pantalla_Puntuacion(Pantalla):
