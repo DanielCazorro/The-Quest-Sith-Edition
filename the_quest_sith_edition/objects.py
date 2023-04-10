@@ -10,6 +10,7 @@ class Nave(Sprite):
 
     margen = 30
     velocidad = 1
+    vidas = 3
 
     # TODO: Se puden hacer varias imágenes, para que parezca que tenga movimiento
 

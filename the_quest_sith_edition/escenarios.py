@@ -353,10 +353,21 @@ class Pantalla_Jugar(Pantalla):
 
             self.pantalla.fill((99, 0, 0))
             self.pintar_fondo()
+            self.pintar_vidas()
             self.jugador.update()
             self.asteroides.update()
             self.asteroides.draw(self.pantalla)
             self.pantalla.blit(self.jugador.image, self.jugador.rect)
+
+            # Aquí hacemos la colisión de la nave con los asteroides
+            # FIXME: Cada vez que golpea un asteroide lo elimina
+            hits = pg.sprite.spritecollide(self.jugador, self.asteroides, True)
+            if hits:
+                print("Golpe")
+                self.jugador.vidas -= 1
+            if self.jugador.vidas <= 0:
+                print("Has muerto")
+                # Aquí iría un stop, y que se elija si camibar de pantalla o no
 
             self.pintar_texto_musica()
             pg.display.flip()
@@ -381,6 +392,15 @@ class Pantalla_Jugar(Pantalla):
         anchura_texto = texto.get_width()
         pos_x = ANCHO_PANTALLA - (anchura_texto + 20)
         pos_y = ALTO_PANTALLA * 1/28
+        self.pantalla.blit(texto, (pos_x, pos_y))
+
+    def pintar_vidas(self):
+        vidas = self.jugador.vidas
+        mensaje = f"VIDAS = {vidas}"
+        texto = self.extra_musica.render(mensaje, False, (COLOR_AMARILLO))
+        anchura_texto = texto.get_width()
+        pos_x = ANCHO_PANTALLA - (anchura_texto + 20)
+        pos_y = ALTO_PANTALLA - 50
         self.pantalla.blit(texto, (pos_x, pos_y))
 
 
