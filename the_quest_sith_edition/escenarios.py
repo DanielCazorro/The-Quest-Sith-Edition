@@ -319,7 +319,7 @@ class Pantalla_Jugar(Pantalla):
         self.asteroides = pg.sprite.Group()
 
         # Aquí podemos cambiar el range a un número mayor para que haya mas asteroides y sea mas difícil
-        for asteroid in range(5):
+        for asteroid in range(10):
             self.asteroide = Asteroide()
             self.asteroides.add(self.asteroide)
 
@@ -340,8 +340,10 @@ class Pantalla_Jugar(Pantalla):
         salir = False
         self.musica_fondo()
 
-        if self.jugador.vidas <= 0:
-            self.jugador.vidas = 3
+        # Esto hace que al morir y volver a jugar, las vidas sean 3
+        # if self.jugador.vidas <= 0:
+        #     self.jugador.vidas = 3
+        self.jugador.vidas = 3
 
         while not salir:
             for event in pg.event.get():
