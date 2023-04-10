@@ -327,12 +327,12 @@ class Pantalla_Jugar(Pantalla):
             "resources", "images", "fondo_pantalla_jugar.jpg")
         self.pantalla_jugar = pg.image.load(imagen_jugar)
 
-        self.jugador.hay_colision(self.asteroides)
-        golpeados = pg.sprite.spritecollide(
-            self.asteroides,
-            self.jugador,
-            True
-        )
+        # self.jugador.hay_colision(self.asteroides)
+        # golpeados = pg.sprite.spritecollide(
+        #     self.asteroides,
+        #     self.jugador,
+        #     True
+        # )
 
     def bucle_principal(self):
 
