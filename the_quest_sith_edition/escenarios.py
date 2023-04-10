@@ -340,6 +340,9 @@ class Pantalla_Jugar(Pantalla):
         salir = False
         self.musica_fondo()
 
+        if self.jugador.vidas <= 0:
+            self.jugador.vidas = 3
+
         while not salir:
             for event in pg.event.get():
                 if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
@@ -368,7 +371,7 @@ class Pantalla_Jugar(Pantalla):
             if self.jugador.vidas <= 0:
                 print("Has muerto")
                 # Aquí iría un stop, y que se elija si camibar de pantalla o no
-
+                return "0"
             self.pintar_texto_musica()
             pg.display.flip()
 
