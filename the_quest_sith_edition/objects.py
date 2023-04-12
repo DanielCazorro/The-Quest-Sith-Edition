@@ -81,7 +81,7 @@ class Asteroide(Sprite):
         self.rect.y = randrange(0, self.margen_asteroide)
         self.rect.x = ANCHO_PANTALLA + self.rect.width
 
-        self.velocidad_x = randrange(1, 3)
+        self.velocidad_x = randrange(1, 2)
 
     def update(self):
 
@@ -92,6 +92,8 @@ class Asteroide(Sprite):
             self.velocidad_x = randrange(1, 3)
             self.puntuacion += self.puntos
             print(f"{self.puntuacion}")
+            return self.puntuacion
+        # FIXME: La puntuación no suma correctamente
 
 
 class Puntuacion():

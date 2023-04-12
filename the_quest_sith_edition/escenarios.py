@@ -351,7 +351,7 @@ class Pantalla_Jugar(Pantalla):
         # if self.jugador.vidas <= 0:
         #     self.jugador.vidas = 3
         self.jugador.vidas = 3
-        self.asteroide.puntuacion = 0
+        self.jugador.puntuacion = 0
 
         while not salir:
             for event in pg.event.get():
@@ -403,12 +403,10 @@ class Pantalla_Jugar(Pantalla):
         pg.mixer.music.play(-1, 0.0)
 
     def sonido_explosion(self):
-        pg.mixer.init()
         sonido_explosion = os.path.join(
             "resources", "sounds", "sonido_explosion.mp3")
-        pg.mixer.music.load(sonido_explosion)
-        pg.mixer.music.set_volume(0.75)
-        pg.mixer.music.play(1, 0.0)
+        self.sound_explosion = pg.mixer.Sound(sonido_explosion)
+        self.sound_explosion.play()
 
     def pintar_texto_musica(self):
         mensaje = "Pulsa <a> para pausar/reaundar la música"
