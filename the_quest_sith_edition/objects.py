@@ -74,6 +74,7 @@ class Asteroide(Sprite):
             self.puntos = 20
         elif self.asteroide_aleatorio == 2:
             self.image = pg.transform.scale(self.image, self.asteroide_l)
+            self.radius = 50
             self.puntos = 30
 
         self.rect = self.image.get_rect()
@@ -86,18 +87,16 @@ class Asteroide(Sprite):
     def update(self):
 
         self.rect.x -= self.velocidad_x
-        if self.rect.right < -10:
+        if self.rect.right <= 0:
+
             self.rect.y = randrange(0, self.margen_asteroide)
             self.rect.x = ANCHO_PANTALLA + self.rect.width
-            self.velocidad_x = randrange(1, 3)
+            self.velocidad_x = randrange(1, 2)
+
             self.puntuacion += self.puntos
             print(f"{self.puntuacion}")
             return self.puntuacion
         # FIXME: La puntuación no suma correctamente
-
-
-class Puntuacion():
-    pass
 
 
 class Planet(Sprite):

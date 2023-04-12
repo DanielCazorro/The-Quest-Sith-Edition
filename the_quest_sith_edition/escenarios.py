@@ -341,6 +341,7 @@ class Pantalla_Jugar(Pantalla):
         self.musica_fondo()
 
         self.asteroides = pg.sprite.Group()
+        self.asteroide = Asteroide()
 
         # Aquí podemos cambiar el range a un número mayor para que haya mas asteroides y sea mas difícil
         for asteroid in range(5):
@@ -351,7 +352,6 @@ class Pantalla_Jugar(Pantalla):
         # if self.jugador.vidas <= 0:
         #     self.jugador.vidas = 3
         self.jugador.vidas = 3
-        self.jugador.puntuacion = 0
 
         while not salir:
             for event in pg.event.get():
@@ -368,6 +368,7 @@ class Pantalla_Jugar(Pantalla):
             self.pintar_fondo()
             self.pintar_vidas()
             self.pintar_puntuacion()
+            # self.pintar_asteroides()
             self.jugador.update()
             self.asteroides.update()
             self.asteroides.draw(self.pantalla)
@@ -386,6 +387,11 @@ class Pantalla_Jugar(Pantalla):
                 # Aquí iría un stop, y que se elija si camibar de pantalla o no
                 return "0"
             self.pintar_texto_musica()
+
+            # Editar aquí el tiempo para finalizar la partida
+            if pg.time.get_ticks() > 5000:
+                print("Termina los asteroides")
+
             pg.display.flip()
 
         return False
@@ -426,7 +432,7 @@ class Pantalla_Jugar(Pantalla):
         self.pantalla.blit(texto, (pos_x, pos_y))
 
     def pintar_puntuacion(self):
-        puntuacion = self.asteroide.puntuacion
+        puntuacion = Asteroide.puntuacion
         mensaje = f"PUNTOS = {puntuacion}"
         texto = self.extra_musica.render(mensaje, False, (COLOR_AMARILLO))
         anchura_texto = texto.get_width()
