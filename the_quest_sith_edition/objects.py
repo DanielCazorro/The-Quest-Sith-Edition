@@ -54,6 +54,8 @@ class Asteroide(Sprite):
     asteroide_m = (75, 75)
     asteroide_l = (100, 100)
 
+    puntuacion = 0
+
     def __init__(self):
         super().__init__()
 
@@ -65,12 +67,14 @@ class Asteroide(Sprite):
         if self.asteroide_aleatorio == 0:
             self.image = pg.transform.scale(self.image, self.asteroide_s)
             self.radius = 25
+            self.puntos = 10
         elif self.asteroide_aleatorio == 1:
             self.image = pg.transform.scale(self.image, self.asteroide_m)
             self.radius = 37
+            self.puntos = 20
         elif self.asteroide_aleatorio == 2:
             self.image = pg.transform.scale(self.image, self.asteroide_l)
-            self.radius = 50
+            self.puntos = 30
 
         self.rect = self.image.get_rect()
         self.margen_asteroide = (ALTO_PANTALLA - self.rect.height)
@@ -86,6 +90,8 @@ class Asteroide(Sprite):
             self.rect.y = randrange(0, self.margen_asteroide)
             self.rect.x = ANCHO_PANTALLA + self.rect.width
             self.velocidad_x = randrange(1, 3)
+            self.puntuacion += self.puntos
+            print(f"{self.puntuacion}")
 
 
 class Puntuacion():

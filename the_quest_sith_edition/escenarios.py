@@ -351,6 +351,7 @@ class Pantalla_Jugar(Pantalla):
         # if self.jugador.vidas <= 0:
         #     self.jugador.vidas = 3
         self.jugador.vidas = 3
+        self.asteroide.puntuacion = 0
 
         while not salir:
             for event in pg.event.get():
@@ -366,6 +367,7 @@ class Pantalla_Jugar(Pantalla):
             self.pantalla.fill((99, 0, 0))
             self.pintar_fondo()
             self.pintar_vidas()
+            self.pintar_puntuacion()
             self.jugador.update()
             self.asteroides.update()
             self.asteroides.draw(self.pantalla)
@@ -376,6 +378,7 @@ class Pantalla_Jugar(Pantalla):
             hits = pg.sprite.spritecollide(
                 self.jugador, self.asteroides, True)
             if hits:
+                self.sonido_explosion()
                 print("Golpe")
                 self.jugador.vidas -= 1
             if self.jugador.vidas <= 0:
@@ -399,6 +402,14 @@ class Pantalla_Jugar(Pantalla):
         pg.mixer.music.set_volume(0.75)
         pg.mixer.music.play(-1, 0.0)
 
+    def sonido_explosion(self):
+        pg.mixer.init()
+        sonido_explosion = os.path.join(
+            "resources", "sounds", "sonido_explosion.mp3")
+        pg.mixer.music.load(sonido_explosion)
+        pg.mixer.music.set_volume(0.75)
+        pg.mixer.music.play(1, 0.0)
+
     def pintar_texto_musica(self):
         mensaje = "Pulsa <a> para pausar/reaundar la música"
         texto = self.extra_musica.render(mensaje, False, (COLOR_AMARILLO))
@@ -413,6 +424,15 @@ class Pantalla_Jugar(Pantalla):
         texto = self.extra_musica.render(mensaje, False, (COLOR_AMARILLO))
         anchura_texto = texto.get_width()
         pos_x = ANCHO_PANTALLA - (anchura_texto + 20)
+        pos_y = ALTO_PANTALLA - 50
+        self.pantalla.blit(texto, (pos_x, pos_y))
+
+    def pintar_puntuacion(self):
+        puntuacion = self.asteroide.puntuacion
+        mensaje = f"PUNTOS = {puntuacion}"
+        texto = self.extra_musica.render(mensaje, False, (COLOR_AMARILLO))
+        anchura_texto = texto.get_width()
+        pos_x = ANCHO_PANTALLA / 40
         pos_y = ALTO_PANTALLA - 50
         self.pantalla.blit(texto, (pos_x, pos_y))
 
