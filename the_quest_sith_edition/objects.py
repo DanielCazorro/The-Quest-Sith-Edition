@@ -9,7 +9,7 @@ from . import ANCHO_PANTALLA, ALTO_PANTALLA, FPS, COLOR_NEGRO
 class Nave(Sprite):
 
     margen = 30
-    velocidad = 1
+    velocidad = 3
     vidas = 3
 
     def __init__(self):
@@ -49,6 +49,7 @@ class Asteroide(Sprite):
     asteroide_l = (100, 100)
 
     puntuacion = 0
+    contador_tiempo = 0
 
     def __init__(self):
         super().__init__()
@@ -81,6 +82,7 @@ class Asteroide(Sprite):
 
         if self.rect.right <= 0:
 
+            self.contador_tiempo += 1
             self.puntuacion += 10
 
             self.rect.y = randrange(0, self.margen_asteroide)
@@ -88,6 +90,7 @@ class Asteroide(Sprite):
             self.velocidad_x = randrange(1, 3)
 
         print(f"{self.puntuacion}")
+        print(f"TIEMPO: {self.contador_tiempo}")
 
         # FIXME: La puntuación no suma correctamente
 

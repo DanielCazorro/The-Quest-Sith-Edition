@@ -4,7 +4,7 @@ import pygame as pg
 from pygame.sprite import Sprite
 
 from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA
-from .escenarios import Pantalla, Pantalla_Historia, Pantalla_Inicio, Pantalla_Instrucciones, Pantalla_Jugar, Pantalla_Puntuacion
+from .escenarios import Pantalla, Pantalla_Historia, Pantalla_Inicio, Pantalla_Instrucciones, Pantalla_Jugar, Pantalla_Jugar2, Pantalla_Puntuacion
 
 
 class The_Quest:
@@ -31,6 +31,7 @@ class The_Quest:
             Pantalla_Instrucciones(self.pantalla),
             Pantalla_Historia(self.pantalla),
             Pantalla_Jugar(self.pantalla),
+            Pantalla_Jugar2(self.pantalla),
             Pantalla_Puntuacion(self.pantalla)]
 
     def jugando(self):
@@ -41,7 +42,8 @@ class The_Quest:
         Instrucciones = 2
         Historia = 3
         Jugar = 4
-        Puntuacion = 5
+        Jugar2 = 5
+        Puntuacion = 6
 
         while pantalla_actual != "SALIR":
             resultado_bucle = self.pantallas[pantalla_actual].bucle_principal()
@@ -90,5 +92,13 @@ class The_Quest:
                     pantalla_actual = "SALIR"
                 if resultado_bucle == "0":
                     pantalla_actual = Inicio
+                if resultado_bucle == "PASAS":
+                    pantalla_actual = Jugar2
+
+            if pantalla_actual == Jugar2:
+                if resultado_bucle == "SALIR":
+                    pantalla_actual = "SALIR"
+                if resultado_bucle == "RESULTADO":
+                    pantalla_actual = Puntuacion
         pg.quit
         return
