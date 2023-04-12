@@ -3,7 +3,7 @@ import pygame as pg
 from random import randint
 
 from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA, COLOR_AMARILLO, COLOR_BLANCO, COLOR_NEGRO, COLOR_ROJO, FPS
-from .objects import Nave, Asteroide
+from .objects import Nave, Asteroide, Planet
 
 
 class Pantalla:
@@ -334,6 +334,8 @@ class Pantalla_Jugar(Pantalla):
             self.asteroide = Asteroide()
             self.asteroides.add(self.asteroide)
 
+        self.planet = Planet()
+
         self.jugador.vidas = 3
 
         while not salir:
@@ -373,7 +375,7 @@ class Pantalla_Jugar(Pantalla):
             # Editar aquí el tiempo para finalizar la partida
             if pg.time.get_ticks() > 5000:
                 print("Termina los asteroides")
-
+                self.planet.aparece_planeta()
             pg.display.flip()
 
         return False
@@ -417,7 +419,6 @@ class Pantalla_Jugar(Pantalla):
         puntuacion = self.asteroide.puntuacion
         mensaje = f"PUNTOS = {puntuacion}"
         texto = self.extra_musica.render(mensaje, False, (COLOR_AMARILLO))
-        anchura_texto = texto.get_width()
         pos_x = ANCHO_PANTALLA / 40
         pos_y = ALTO_PANTALLA - 50
         self.pantalla.blit(texto, (pos_x, pos_y))
