@@ -12,8 +12,6 @@ class Nave(Sprite):
     velocidad = 1
     vidas = 3
 
-    # TODO: Se puden hacer varias imágenes, para que parezca que tenga movimiento
-
     def __init__(self):
 
         super().__init__()
@@ -41,11 +39,7 @@ class Nave(Sprite):
 
     def aterrizar(self):
         pass
-
-    # def hay_colision(self, otro):
-    #     if self.rect.colliderect(otro):
-    #         # hay colisión
-    #         print("Hay colisión")
+    # TODO
 
 
 class Asteroide(Sprite):
@@ -67,22 +61,23 @@ class Asteroide(Sprite):
         if self.asteroide_aleatorio == 0:
             self.image = pg.transform.scale(self.image, self.asteroide_s)
             self.radius = 25
-            self.puntos = 10
+            self.puntos_s = 5
         elif self.asteroide_aleatorio == 1:
             self.image = pg.transform.scale(self.image, self.asteroide_m)
             self.radius = 37
-            self.puntos = 20
+            self.puntos_m = 10
         elif self.asteroide_aleatorio == 2:
             self.image = pg.transform.scale(self.image, self.asteroide_l)
             self.radius = 50
-            self.puntos = 30
+            self.puntos_l = 23
+        self.puntos = 30
 
         self.rect = self.image.get_rect()
         self.margen_asteroide = (ALTO_PANTALLA - self.rect.height)
         self.rect.y = randrange(0, self.margen_asteroide)
         self.rect.x = ANCHO_PANTALLA + self.rect.width
 
-        self.velocidad_x = randrange(1, 2)
+        self.velocidad_x = randrange(1, 3)
 
     def update(self):
 
@@ -91,11 +86,20 @@ class Asteroide(Sprite):
 
             self.rect.y = randrange(0, self.margen_asteroide)
             self.rect.x = ANCHO_PANTALLA + self.rect.width
-            self.velocidad_x = randrange(1, 2)
+            self.velocidad_x = randrange(1, 3)
 
-            self.puntuacion += self.puntos
-            print(f"{self.puntuacion}")
-            return self.puntuacion
+        if self.asteroide_aleatorio == 0:
+            if self.rect.right < 0:
+                self.puntuacion += self.puntos_s
+        elif self.asteroide_aleatorio == 1:
+            if self.rect.right < 0:
+                self.puntuacion += self.puntos_m
+        elif self.asteroide_aleatorio == 2:
+            if self.rect.right < 0:
+                self.puntuacion += self.puntos_l
+
+        print(f"{self.puntuacion}")
+
         # FIXME: La puntuación no suma correctamente
 
 

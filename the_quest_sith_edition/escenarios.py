@@ -316,23 +316,9 @@ class Pantalla_Jugar(Pantalla):
 
         self.jugador = Nave()
 
-        # self.asteroides = pg.sprite.Group()
-
-        # # Aquí podemos cambiar el range a un número mayor para que haya mas asteroides y sea mas difícil
-        # for asteroid in range(10):
-        #     self.asteroide = Asteroide()
-        #     self.asteroides.add(self.asteroide)
-
         imagen_jugar = os.path.join(
             "resources", "images", "fondo_pantalla_jugar.jpg")
         self.pantalla_jugar = pg.image.load(imagen_jugar)
-
-        # self.jugador.hay_colision(self.asteroides)
-        # golpeados = pg.sprite.spritecollide(
-        #     self.asteroides,
-        #     self.jugador,
-        #     True
-        # )
 
     def bucle_principal(self):
 
@@ -344,13 +330,10 @@ class Pantalla_Jugar(Pantalla):
         self.asteroide = Asteroide()
 
         # Aquí podemos cambiar el range a un número mayor para que haya mas asteroides y sea mas difícil
-        for asteroid in range(5):
+        for asteroid in range(10):
             self.asteroide = Asteroide()
             self.asteroides.add(self.asteroide)
 
-        # Esto hace que al morir y volver a jugar, las vidas sean 3
-        # if self.jugador.vidas <= 0:
-        #     self.jugador.vidas = 3
         self.jugador.vidas = 3
 
         while not salir:
@@ -368,7 +351,6 @@ class Pantalla_Jugar(Pantalla):
             self.pintar_fondo()
             self.pintar_vidas()
             self.pintar_puntuacion()
-            # self.pintar_asteroides()
             self.jugador.update()
             self.asteroides.update()
             self.asteroides.draw(self.pantalla)
@@ -432,7 +414,7 @@ class Pantalla_Jugar(Pantalla):
         self.pantalla.blit(texto, (pos_x, pos_y))
 
     def pintar_puntuacion(self):
-        puntuacion = Asteroide.puntuacion
+        puntuacion = self.asteroide.puntuacion
         mensaje = f"PUNTOS = {puntuacion}"
         texto = self.extra_musica.render(mensaje, False, (COLOR_AMARILLO))
         anchura_texto = texto.get_width()
