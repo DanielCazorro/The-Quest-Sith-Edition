@@ -371,10 +371,10 @@ class Pantalla_Jugar(Pantalla):
                 return "0"
 
             # Editar aquí el tiempo para finalizar la partida
-            if pg.time.get_ticks() > 5000:
+            if pg.time.get_ticks() > 20000:
                 print("Termina los asteroides")
                 self.aparece_planeta()
-                self.pintar_asteroides()
+                self.jugador.aterrizar_planeta(aterriza=True)
                 # TODO: Hacer aquí el cambio de pantalla, que aparezca el planeta y demás
                 # return "PASAS"
 

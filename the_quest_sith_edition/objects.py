@@ -22,6 +22,7 @@ class Nave(Sprite):
         self.rect.x = self.margen
 
         self.nave_esconder = False
+        self.nave_aterrizar = False
 
     def update(self):
         """
@@ -44,9 +45,15 @@ class Nave(Sprite):
             self.rect.y = ALTO_PANTALLA/2
             self.rect.x = self.margen
 
-    def aterrizar(self):
+    def aterrizar_planeta(self, aterriza):
         pass
     # TODO
+        self.nave_aterrizar = aterriza
+        if aterriza:
+            if self.rect.y < (ALTO_PANTALLA - self.rect.height) / 2:
+                self.rect.y += self.velocidad
+            elif self.rect.y > (ALTO_PANTALLA - self.rect.height) / 2:
+                self.rect.y -= self.velocidad
 
     def nave_golpeada(self):
         self.tiempo_esconder = pg.time.get_ticks() / 500
