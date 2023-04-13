@@ -332,13 +332,7 @@ class Pantalla_Jugar(Pantalla):
 
         salir = False
         self.musica_fondo()
-        # self.asteroides = pg.sprite.Group()
-        # self.asteroide = Asteroide()
-        # Aquí podemos cambiar el range a un número mayor para que haya mas asteroides y sea mas difícil
-        # for asteroid in range(self.num_asteroides):
-        #     self.asteroide = Asteroide()
-        #     self.asteroides.add(self.asteroide)
-        # self.planeta = Planeta(self)
+
         self.jugador.vidas = 3
         aterrizaje = False
 
@@ -465,12 +459,12 @@ class Pantalla_Jugar(Pantalla):
             self.planeta.aparece_planeta(aterrizar)
             self.jugador.aterrizando_nave(aterrizar, self.pantalla)
 
-    def crear_asteroides(self, min_asteroide, max_asteroide, puntos):
+    def crear_asteroides(self, min_asteroide, max_asteroide, n_puntos):
 
         num_asteroides = randint(min_asteroide, max_asteroide)
         for asteroid in range(num_asteroides):
-            puntos = (asteroid + puntos) - puntos
-            asteroide = Asteroide(puntos)
+            n_puntos = (asteroid + n_puntos) - n_puntos
+            asteroide = Asteroide(n_puntos)
             self.asteroides.add(asteroide)
 
     def pintar_asteroides(self):
@@ -490,8 +484,8 @@ class Pantalla_Jugar(Pantalla):
                         Asteroide.puntuacion += puntos
                     self.asteroides.remove(asteroide)
 
-            if len(self.asteroides.sprites()) < 1:
-                self.pintar_asteroides()
+            if len(self.asteroides.sprites()) < 4:
+                self.crear_asteroides(5, 10, 5)
 
         else:
             self.asteroides.clear(self.pantalla, self.pantalla)

@@ -125,7 +125,7 @@ class Asteroide(Sprite):
         self.rect.y = randrange(0, self.margen_asteroide)
         self.rect.x = ANCHO_PANTALLA + self.rect.width
 
-        self.velocidad_x = randrange(2, 8)
+        self.velocidad_x = randrange(2, 6)
 
     def update(self):
 
