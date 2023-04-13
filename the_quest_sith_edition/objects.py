@@ -21,6 +21,8 @@ class Nave(Sprite):
         self.rect.y = ALTO_PANTALLA/2
         self.rect.x = self.margen
 
+        self.nave_esconder = False
+
     def update(self):
         """
         TODO: Aquí hay que hacer otro bucle con una función de pg que sea pulsar teclas, y que la velocidad sea menor (o aumnetar la velocidad de este bucle)
@@ -37,9 +39,20 @@ class Nave(Sprite):
             if self.rect.top < 0:
                 self.rect.top = 0
 
+        if self.nave_esconder and pg.time.get_ticks()/500 - self.tiempo_esconder > 3:
+            self.nave_esconder = False
+            self.rect.y = ALTO_PANTALLA/2
+            self.rect.x = self.margen
+
     def aterrizar(self):
         pass
     # TODO
+
+    def nave_golpeada(self):
+        self.tiempo_esconder = pg.time.get_ticks() / 500
+        self.nave_esconder = True
+        self.rect.x = -1000
+        self.rect.y = -1000
 
 
 class Asteroide(Sprite):
@@ -95,20 +108,16 @@ class Asteroide(Sprite):
         # FIXME: La puntuación no suma correctamente
 
 
-class Planet(Sprite):
-
-    velocidad_movimiento_planeta = 50
-
-    def __init__(self):
+class Planeta(Sprite):
+    def __init__(self, otro):
         super().__init__()
-        imagen_planeta = os.path.join("resources", "images", "planeta.png")
-        self.image = pg.image.load(imagen_planeta)
-        self.rect = self.image.get_rect()
-        self.rect.x = 5000
-        self.rect.y = (ALTO_PANTALLA - self.image.get_height()) / 2
+        self.pantalla = otro.pantalla
+        self.pantalla_rect = otro.pantalla.get_rect()
+        self.planeta_imagen = pg.image.load(
+            os.path.join("resources", "images", "planeta.png"))
+        self.planeta_rect = self.planeta_imagen.get_rect(
+            midleft=(ANCHO_PANTALLA + 5, ALTO_PANTALLA/2))
+        self.velocidad_x = 1
 
-    def aparece_planeta(self):
-
-        self.rect.x -= self.velocidad_movimiento_planeta
-        if self.rect.x < ANCHO_PANTALLA/2:
-            self.rect.x = ANCHO_PANTALLA / 2
+    def blit_planeta(self):
+        self.pantalla.blit(self.planeta_imagen, self.planeta_rect)

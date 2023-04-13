@@ -3,7 +3,7 @@ import pygame as pg
 from random import randint
 
 from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA, COLOR_AMARILLO, COLOR_BLANCO, COLOR_NEGRO, COLOR_ROJO, FPS
-from .objects import Nave, Asteroide, Planet
+from .objects import Nave, Asteroide, Planeta
 
 
 class Pantalla:
@@ -310,6 +310,8 @@ class Pantalla_Historia(Pantalla):
 
 class Pantalla_Jugar(Pantalla):
 
+    num_asteroides = 7
+
     def __init__(self, pantalla):
         super().__init__(pantalla)
 
@@ -326,10 +328,10 @@ class Pantalla_Jugar(Pantalla):
         self.asteroides = pg.sprite.Group()
         self.asteroide = Asteroide()
         # Aquí podemos cambiar el range a un número mayor para que haya mas asteroides y sea mas difícil
-        for asteroid in range(7):
-            self.asteroide = Asteroide()
-            self.asteroides.add(self.asteroide)
-        self.planet = Planet()
+        # for asteroid in range(self.num_asteroides):
+        #     self.asteroide = Asteroide()
+        #     self.asteroides.add(self.asteroide)
+        self.planeta = Planeta(self)
         self.jugador.vidas = 3
 
         while not salir:
@@ -348,8 +350,10 @@ class Pantalla_Jugar(Pantalla):
             self.pintar_puntuacion()
             self.pintar_texto_musica()
             self.jugador.update()
-            self.asteroides.update()
             self.asteroides.draw(self.pantalla)
+            self.pintar_asteroides()
+            self.asteroides.update()
+
             self.pantalla.blit(self.jugador.image, self.jugador.rect)
 
             # Aquí hacemos la colisión de la nave con los asteroides
@@ -360,6 +364,7 @@ class Pantalla_Jugar(Pantalla):
                 self.sonido_explosion()
                 print("Golpe")
                 self.jugador.vidas -= 1
+                self.jugador.nave_golpeada()
             if self.jugador.vidas <= 0:
                 print("Has muerto")
                 # Aquí iría un stop, y que se elija si camibar de pantalla o no
@@ -368,9 +373,10 @@ class Pantalla_Jugar(Pantalla):
             # Editar aquí el tiempo para finalizar la partida
             if pg.time.get_ticks() > 5000:
                 print("Termina los asteroides")
-                self.planet.aparece_planeta()
+                self.aparece_planeta()
+                self.pintar_asteroides()
                 # TODO: Hacer aquí el cambio de pantalla, que aparezca el planeta y demás
-                return "PASAS"
+                # return "PASAS"
 
             pg.display.flip()
 
@@ -416,6 +422,21 @@ class Pantalla_Jugar(Pantalla):
         pos_x = ANCHO_PANTALLA / 40
         pos_y = ALTO_PANTALLA - 50
         self.pantalla.blit(texto, (pos_x, pos_y))
+
+    def aparece_planeta(self):
+
+        # Esperar un tiempo a que pasen asteroides y borrarlos
+        self.planeta.blit_planeta()
+        self.planeta.planeta_rect.x -= self.planeta.velocidad_x
+        if self.planeta.planeta_rect.left < ANCHO_PANTALLA - 300:
+            self.planeta.velocidad_x = 0
+        self.num_asteroides = 0
+
+    def pintar_asteroides(self):
+
+        for asteroid in range(self.num_asteroides):
+            self.asteroide = Asteroide()
+            self.asteroides.add(self.asteroide)
 
 
 class Pantalla_Jugar2(Pantalla):
