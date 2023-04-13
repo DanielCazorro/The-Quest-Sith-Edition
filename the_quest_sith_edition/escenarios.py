@@ -2,7 +2,7 @@ import os
 import pygame as pg
 from random import randint
 
-from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA, COLOR_AMARILLO, COLOR_BLANCO, COLOR_NEGRO, COLOR_ROJO, FPS
+from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA, COLOR_AMARILLO, COLOR_BLANCO, COLOR_ROJO, FPS
 from .objects import Nave, Asteroide, Planeta
 
 
@@ -29,7 +29,7 @@ class Pantalla:
 
         self.extra_peque = pg.font.Font(fuente_extra, 25)
 
-        self.extra_musica = pg.font.Font(fuente_extra, 22)
+        self.extra_musica = pg.font.Font(fuente_extra, 18)
 
     def bucle_principal(self):
         pass
@@ -310,8 +310,6 @@ class Pantalla_Historia(Pantalla):
 
 class Pantalla_Jugar(Pantalla):
 
-    num_asteroides = 7
-
     def __init__(self, pantalla):
         super().__init__(pantalla)
 
@@ -320,24 +318,44 @@ class Pantalla_Jugar(Pantalla):
             "resources", "images", "fondo_pantalla_jugar.jpg")
         self.pantalla_jugar = pg.image.load(imagen_jugar)
 
+        imagen_planeta = pg.image.load(os.path.join(
+            "resources", "images", "planeta.png"))
+        self.planeta = Planeta(imagen_planeta)
+
+        self.asteroides = pg.sprite.Group()
+        # FIXME: Esto quizás sea mejor sacar a variables globales
+        self.crear_asteroides(5, 10, 6)
+
     def bucle_principal(self):
         super().bucle_principal()
+        ticks_juego = pg.time.get_ticks()
 
         salir = False
         self.musica_fondo()
-        self.asteroides = pg.sprite.Group()
-        self.asteroide = Asteroide()
+        # self.asteroides = pg.sprite.Group()
+        # self.asteroide = Asteroide()
         # Aquí podemos cambiar el range a un número mayor para que haya mas asteroides y sea mas difícil
         # for asteroid in range(self.num_asteroides):
         #     self.asteroide = Asteroide()
         #     self.asteroides.add(self.asteroide)
-        self.planeta = Planeta(self)
+        # self.planeta = Planeta(self)
         self.jugador.vidas = 3
+        aterrizaje = False
 
         while not salir:
+            self.reloj.tick(FPS)
+
+            tiempo_juego = (pg.time.get_ticks() - ticks_juego)//900
+
             for event in pg.event.get():
+
                 if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
                     return "SALIR"
+
+                if self.jugador.terminar_rotar:
+                    pass
+                # TODO: Colocar aquí que al pulsar tecla, pase al siguiente nivel?
+
                 if event.type == pg.KEYDOWN and event.key == pg.K_a:  # ESTO SIRVE PARA PARAR LA MUSICA PULSANDO A
                     if pg.mixer.music.get_busy():
                         pg.mixer.music.stop()
@@ -349,34 +367,49 @@ class Pantalla_Jugar(Pantalla):
             self.pintar_vidas()
             self.pintar_puntuacion()
             self.pintar_texto_musica()
-            self.jugador.update()
-            self.asteroides.draw(self.pantalla)
+            # self.jugador.update()
+            # self.asteroides.draw(self.pantalla)
+            # self.pintar_asteroides()
+            # self.asteroides.update()
+
+            self.aparece_planeta(aterrizaje)
             self.pintar_asteroides()
-            self.asteroides.update()
+            self.colisionar_y_puntos(aterrizaje, 10, 20, 5)
 
             self.pantalla.blit(self.jugador.image, self.jugador.rect)
 
-            # Aquí hacemos la colisión de la nave con los asteroides
-            # FIXME: Cada vez que golpea un asteroide lo elimina
-            hits = pg.sprite.spritecollide(
-                self.jugador, self.asteroides, True)
-            if hits:
-                self.sonido_explosion()
-                print("Golpe")
-                self.jugador.vidas -= 1
-                self.jugador.nave_golpeada()
+            if tiempo_juego == 20:
+                aterrizaje = True
+
+            if self.jugador.terminar_rotar:
+                print(
+                    "Colocar aquí texto del siguiente nivel, y que al pulsar cambie de pantalla")
+
             if self.jugador.vidas <= 0:
                 print("Has muerto")
                 # Aquí iría un stop, y que se elija si camibar de pantalla o no
                 return "0"
+            # # Aquí hacemos la colisión de la nave con los asteroides
+            # # FIXME: Cada vez que golpea un asteroide lo elimina
+            # hits = pg.sprite.spritecollide(
+            #     self.jugador, self.asteroides, True)
+            # if hits:
+            #     self.sonido_explosion()
+            #     print("Golpe")
+            #     self.jugador.vidas -= 1
+            #     self.jugador.nave_golpeada()
+            # if self.jugador.vidas <= 0:
+            #     print("Has muerto")
+            #     # Aquí iría un stop, y que se elija si camibar de pantalla o no
+            #     return "0"
 
-            # Editar aquí el tiempo para finalizar la partida
-            if pg.time.get_ticks() > 20000:
-                print("Termina los asteroides")
-                self.aparece_planeta()
-                self.jugador.aterrizar_planeta(aterriza=True)
-                # TODO: Hacer aquí el cambio de pantalla, que aparezca el planeta y demás
-                # return "PASAS"
+            # # Editar aquí el tiempo para finalizar la partida
+            # if pg.time.get_ticks() > 20000:
+            #     print("Termina los asteroides")
+            #     self.aparece_planeta()
+            #     self.jugador.aterrizar_planeta(aterriza=True)
+            #     # TODO: Hacer aquí el cambio de pantalla, que aparezca el planeta y demás
+            #     # return "PASAS"
 
             pg.display.flip()
 
@@ -416,27 +449,52 @@ class Pantalla_Jugar(Pantalla):
         self.pantalla.blit(texto, (pos_x, pos_y))
 
     def pintar_puntuacion(self):
-        puntuacion = self.asteroide.puntuacion
+        puntuacion = Asteroide.puntuacion
         mensaje = f"PUNTOS = {puntuacion}"
         texto = self.extra_musica.render(mensaje, False, (COLOR_AMARILLO))
         pos_x = ANCHO_PANTALLA / 40
         pos_y = ALTO_PANTALLA - 50
         self.pantalla.blit(texto, (pos_x, pos_y))
 
-    def aparece_planeta(self):
+    def aparece_planeta(self, aterrizar):
+        self.jugador.update()
+        if not aterrizar:
+            self.pantalla.blit(self.jugador.image, self.jugador.rect)
+        else:
+            self.pantalla.blit(self.planeta.image, self.planeta.rect)
+            self.planeta.aparece_planeta(aterrizar)
+            self.jugador.aterrizando_nave(aterrizar, self.pantalla)
 
-        # Esperar un tiempo a que pasen asteroides y borrarlos
-        self.planeta.blit_planeta()
-        self.planeta.planeta_rect.x -= self.planeta.velocidad_x
-        if self.planeta.planeta_rect.left < ANCHO_PANTALLA - 300:
-            self.planeta.velocidad_x = 0
-        self.num_asteroides = 0
+    def crear_asteroides(self, min_asteroide, max_asteroide, puntos):
+
+        num_asteroides = randint(min_asteroide, max_asteroide)
+        for asteroid in range(num_asteroides):
+            puntos = (asteroid + puntos) - puntos
+            asteroide = Asteroide(puntos)
+            self.asteroides.add(asteroide)
 
     def pintar_asteroides(self):
+        self.asteroides.update()
+        self.asteroides.draw(self.pantalla)
 
-        for asteroid in range(self.num_asteroides):
-            self.asteroide = Asteroide()
-            self.asteroides.add(self.asteroide)
+    def colisionar_y_puntos(self, aterrizar, min, max, puntos):
+        if not aterrizar:
+            hit = pg.sprite.spritecollide(self.jugador, self.asteroides, True)
+            if hit:
+                self.jugador.nave_golpeada()
+                self.jugador.vidas -= 1
+
+            for asteroide in self.asteroides.sprites():
+                if asteroide.rect.right < 0:
+                    if not self.jugador.nave_esconder:
+                        Asteroide.puntuacion += puntos
+                    self.asteroides.remove(asteroide)
+
+            if len(self.asteroides.sprites()) < 1:
+                self.pintar_asteroides()
+
+        else:
+            self.asteroides.clear(self.pantalla, self.pantalla)
 
 
 class Pantalla_Jugar2(Pantalla):
