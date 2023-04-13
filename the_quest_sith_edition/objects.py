@@ -10,7 +10,7 @@ class Nave(Sprite):
 
     margen = 30
     velocidad = 6
-    velocidad_aterrizaje = 1
+    velocidad_aterrizaje = 2
     vidas = 3
 
     def __init__(self):
@@ -63,8 +63,8 @@ class Nave(Sprite):
             else:
                 self.rect.y += self.velocidad_aterrizaje
 
-            if self.rect.x > ANCHO_PANTALLA/2 + 45:
-                self.rect.x = ANCHO_PANTALLA/2 + 45
+            if self.rect.x > ANCHO_PANTALLA/2 + 40:
+                self.rect.x = ANCHO_PANTALLA/2 + 40
                 self.rect.centery = ALTO_PANTALLA/2
                 self.rotar = True
 
