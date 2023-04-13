@@ -324,8 +324,6 @@ class Pantalla_Jugar(Pantalla):
         self.planeta = Planeta(imagen_planeta)
 
         self.asteroides = pg.sprite.Group()
-        # FIXME: Esto quizás sea mejor sacar a variables globales
-        self.crear_asteroides(5, 10, 6)  # FIXME: llamar desde objeto asteroide
 
     def bucle_principal(self):
         # super().bucle_principal()  # FIXME: Quitar
@@ -500,7 +498,8 @@ class Pantalla_Jugar2(Pantalla):
         self.asteroides = pg.sprite.Group()
         # FIXME: Esto quizás sea mejor sacar a variables globales
         # FIXME: llamar desde objeto asteroide
-        self.crear_asteroides(10, 20, 5)
+ 
+ 
 
     def bucle_principal(self):
         # super().bucle_principal()  # FIXME: Quitar

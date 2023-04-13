@@ -56,13 +56,19 @@ class Nave(Sprite):
         if aterriza:
             self.rect.x += self.velocidad_aterrizaje
 
-            if self.rect.y > (ALTO_PANTALLA - self.rect.height)/2:
+            # Utilizar el centro en lugar de la y
+            # if self.rect.y > (ALTO_PANTALLA - self.rect.height)/2:
+            #     self.rect.y -= self.velocidad_aterrizaje
+            # else:
+            #     self.rect.y += self.velocidad_aterrizaje
+
+            if self.rect.y > self.rect.center:
                 self.rect.y -= self.velocidad_aterrizaje
             else:
-                self.rect.y += self.velocidad_aterrizaje
+                self.rect.y + - self.velocidad_aterrizaje
 
-            if self.rect.x > ANCHO_PANTALLA/2 + 40:
-                self.rect.x = ANCHO_PANTALLA/2 + 40
+            if self.rect.x > ANCHO_PANTALLA/2 + 50:
+                self.rect.x = ANCHO_PANTALLA/2 + 50
                 self.rect.centery = ALTO_PANTALLA/2
                 self.rotar = True
 
@@ -72,6 +78,7 @@ class Nave(Sprite):
                     nave_girada = pg.transform.rotate(self.image, 180)
                     rect_rotado2 = nave_girada.get_rect(
                         center=self.rect.center)
+                    # Estoy pintando la nave en lugar de girarla
                     pantalla.blit(nave_girada, rect_rotado2)
 
                 if self.rotar:
@@ -107,6 +114,7 @@ class Asteroide(Sprite):
             "resources", "images", "asteroide.png")
         self.image = pg.image.load(imagen_asteroide)
 
+        # FIXME: Arreglar los asteroides, para que no cargue al disco duro cada vez, guadarlo antes y luego llamarlo
         self.asteroide_aleatorio = randrange(0, 3)
         if self.asteroide_aleatorio == 0:
             self.image = pg.transform.scale(self.image, self.asteroide_s)
@@ -134,20 +142,6 @@ class Asteroide(Sprite):
         if self.rect.bottom == ALTO_PANTALLA:
             self.rect.y = ALTO_PANTALLA - 50
 
-        # if self.rect.right <= 0:
-
-        #     self.contador_tiempo += 1
-        #     self.puntuacion += 10
-
-        #     self.rect.y = randrange(0, self.margen_asteroide)
-        #     self.rect.x = ANCHO_PANTALLA + self.rect.width
-        #     self.velocidad_x = randrange(1, 3)
-
-        # print(f"{self.puntuacion}")
-        # print(f"TIEMPO: {self.contador_tiempo}")
-
-        # FIXME: La puntuación no suma correctamente
-
 
 class Planeta(Sprite):
     def __init__(self, otro):
@@ -165,5 +159,5 @@ class Planeta(Sprite):
     def aparece_planeta(self, aterrizando_nave):
         if aterrizando_nave:
             self.rect.x -= self.velocidad_x
-            if self.rect.x < ANCHO_PANTALLA - self.rect.height:
-                self.rect.x = ANCHO_PANTALLA - self.rect.height
+            if self.rect.x < (ANCHO_PANTALLA - self.rect.height) * 2:
+                self.rect.x = (ANCHO_PANTALLA - self.rect.height) * 2
