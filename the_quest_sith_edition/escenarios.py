@@ -372,8 +372,10 @@ class Pantalla_Jugar(Pantalla):
                 aterrizaje = True
 
             if self.jugador.terminar_rotar:
-                print(
-                    "Colocar aquí texto del siguiente nivel, y que al pulsar cambie de pantalla")
+                self.pintar_texto_continuar()
+                for event in pg.event.get():
+                    if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                        return "PASAS"
 
             if self.jugador.vidas <= 0:
                 print("Has muerto")
@@ -436,6 +438,10 @@ class Pantalla_Jugar(Pantalla):
 
     def crear_asteroides(self, min_asteroide, max_asteroide, n_puntos):
 
+        # if not aterrizaje:
+        #     num_asteroides = randint(min_asteroide, max_asteroide)
+        # else:
+        #     num_asteroides = 0
         num_asteroides = randint(min_asteroide, max_asteroide)
         for asteroid in range(num_asteroides):
             n_puntos = (asteroid + n_puntos) - n_puntos
@@ -464,6 +470,14 @@ class Pantalla_Jugar(Pantalla):
 
         else:
             self.asteroides.clear(self.pantalla, self.pantalla)
+
+    def pintar_texto_continuar(self):
+        mensaje = "Pulsa <espacio> para el siguiente nivel"
+        texto = self.titulo.render(mensaje, True, (COLOR_BLANCO))
+        anchura_texto = texto.get_width()
+        pos_x = (ANCHO_PANTALLA - anchura_texto) / 2
+        pos_y = ALTO_PANTALLA * 5/8
+        self.pantalla.blit(texto, (pos_x, pos_y))
 
 
 class Pantalla_Jugar2(Pantalla):

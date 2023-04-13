@@ -33,12 +33,10 @@ class Nave(Sprite):
         teclas_pulsadas = pg.key.get_pressed()
         if not aterriza:
             if teclas_pulsadas[pg.K_DOWN]:
-                print("Mueve abajo")
                 self.rect.y += self.velocidad
                 if self.rect.bottom > ALTO_PANTALLA:
                     self.rect.bottom = ALTO_PANTALLA
             if teclas_pulsadas[pg.K_UP]:
-                print("Mueve arriba")
                 self.rect.y -= self.velocidad
                 if self.rect.top < 0:
                     self.rect.top = 0
