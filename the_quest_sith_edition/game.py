@@ -95,10 +95,11 @@ class The_Quest:
                 if resultado_bucle == "PASAS":
                     pantalla_actual = Jugar2
 
+            # Este es el bucle de la elección de la Pantalla_juego2
             if pantalla_actual == Jugar2:
                 if resultado_bucle == "SALIR":
                     pantalla_actual = "SALIR"
-                if resultado_bucle == "RESULTADO":
+                if resultado_bucle == "Records":
                     pantalla_actual = Puntuacion
         pg.quit
         return

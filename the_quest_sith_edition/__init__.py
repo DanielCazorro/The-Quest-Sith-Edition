@@ -7,5 +7,5 @@ COLOR_BLANCO = (255, 255, 255)
 COLOR_NEGRO = (0, 0, 0)
 COLOR_ROJO = (208, 23, 42)
 # Número de FPS a los que se ejecuta el juego
-FPS = 60
+FPS = 144
 PUNTOS = 0
