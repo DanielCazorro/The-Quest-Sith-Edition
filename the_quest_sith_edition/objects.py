@@ -56,7 +56,6 @@ class Nave(Sprite):
         if aterriza:
             self.rect.x += self.velocidad_aterrizaje
 
-            # Utilizar el centro en lugar de la y
             if self.rect.centery > (ALTO_PANTALLA - self.rect.height)/2:
                 self.rect.y -= self.velocidad_aterrizaje
             elif self.rect.centery < (ALTO_PANTALLA - self.rect.height)/2:
@@ -66,6 +65,19 @@ class Nave(Sprite):
                 self.rect.x = ANCHO_PANTALLA/2 + 50
                 self.rect.centery = ALTO_PANTALLA/2
                 self.rotar = True
+
+                # if self.rotar:
+                #     self.giro += 4
+                #     self.image = pg.transform.rotate(self.image, self.giro)
+                #     rotada2 = self.image.get_rect(center=self.rect.center)
+                #     pantalla.blit(self.image, rotada2)
+
+                # if self.giro == 180:
+                #     self.rotar = False
+                #     self.terminar_rotar = True
+                #     self.image = pg.transform.rotate(self.image, 180)
+                #     rotada = self.image.get_rect(center=self.rect.center)
+                #     pantalla.blit(self.image, rotada)
 
                 if self.giro == 180:
                     self.rotar = False

@@ -52,7 +52,7 @@ class Pantalla_Inicio(Pantalla):
         super().bucle_principal()
         salir = False
         self.musica_fondo()
-
+        temporizador = 0
         while not salir:
             print(pg.time.get_ticks())
             for event in pg.event.get():
@@ -64,14 +64,19 @@ class Pantalla_Inicio(Pantalla):
                     return "H"
                 if event.type == pg.KEYDOWN and event.key == pg.K_c:
                     return "C"
-                if pg.time.get_ticks() > 500000000:  # TODO: Cambiar este número a algo mas normal
-                    return "R"
+                # if pg.time.get_ticks() > 6000:  # TODO: Cambiar este número a algo mas normal
+                #     return "R"
 
                 if event.type == pg.KEYDOWN and event.key == pg.K_a:  # ESTO SIRVE PARA PARAR LA MUSICA PULSANDO A
                     if pg.mixer.music.get_busy():
                         pg.mixer.music.stop()
                     else:
                         pg.mixer_music.play(-1, 0.0)
+
+                cambio_pantalla = temporizador + 1
+                pg.time.set_timer(cambio_pantalla, 6)
+                if temporizador == 1:
+                    return "R"
             self.pantalla.fill((99, 0, 0))
             self.pintar_fondo()
             self.pintar_texto_iniciar()
@@ -441,8 +446,8 @@ class Pantalla_Jugar(Pantalla):
             n_puntos = (asteroid + n_puntos) - n_puntos
             asteroide = Asteroide(n_puntos)
             self.asteroides.add(asteroide)
-            if asteroide.rect.right < 0:
-                self.puntuacion += 10
+            # if asteroide.rect.right < 0:
+            # self.puntuacion += 10
 
     def pintar_asteroides(self):
         self.asteroides.update()
@@ -461,8 +466,8 @@ class Pantalla_Jugar(Pantalla):
                         Asteroide.puntuacion += puntos
                     # self.asteroides.remove(asteroide)
 
-            if len(self.asteroides.sprites()) < 3:
-                self.crear_asteroides(5, 10, 5)
+            # if len(self.asteroides.sprites()) < 3:
+            #     self.crear_asteroides(5, 10, 5)
 
         else:
             self.asteroides.clear(self.pantalla, self.pantalla)
@@ -482,58 +487,51 @@ class Pantalla_Jugar2(Pantalla):
         super().__init__(pantalla)
 
         self.jugador = Nave()
+        # self.puntuacion = puntuacion
         imagen_jugar = os.path.join(
             "resources", "images", "fondo_pantalla_jugar2.jpg")
         self.pantalla_jugar = pg.image.load(imagen_jugar)
 
-        # FIXME:
         imagen_planeta = pg.image.load(os.path.join(
             "resources", "images", "planeta.png"))
         self.planeta = Planeta(imagen_planeta)
 
         self.asteroides = pg.sprite.Group()
-        # FIXME: Esto quizás sea mejor sacar a variables globales
-        # FIXME: llamar desde objeto asteroide
+        self.crear_asteroides(8, 14, 7)
 
     def bucle_principal(self):
-        # super().bucle_principal()  # FIXME: Quitar
-        ticks_juego = pg.time.get_ticks()
 
+        ticks_juego = pg.time.get_ticks()
         # PONER EN EL INIT
         salir = False
+        aterrizaje = False
         self.musica_fondo()
 
-        aterrizaje = False
+        self.jugador.vidas = 3
 
         while not salir:
             self.reloj.tick(FPS)
-
             tiempo_juego = (pg.time.get_ticks() - ticks_juego)//900
-            self.jugador.vidas = self.jugador.vidas
+
             for event in pg.event.get():
 
                 if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
                     return "SALIR"
-
-                # if self.jugador.terminar_rotar:
-                #     pass
-                # TODO: Colocar aquí que al pulsar tecla, pase al siguiente nivel?
-
                 if event.type == pg.KEYDOWN and event.key == pg.K_a:  # ESTO SIRVE PARA PARAR LA MUSICA PULSANDO A
                     if pg.mixer.music.get_busy():
                         pg.mixer.music.stop()
                     else:
                         pg.mixer_music.play(-1, 0.0)
 
-            # self.pantalla.fill((0, 0, 0))
             self.pintar_fondo()
             self.pintar_vidas()
             self.pintar_puntuacion()
             self.pintar_texto_musica()
             self.jugador.update()
             self.aparece_planeta(aterrizaje)
-            self.pintar_asteroides()
-            self.colisionar_y_puntos(aterrizaje, 5, 10, 5)
+            if not aterrizaje:
+                self.pintar_asteroides()
+            self.colisionar_y_puntos(aterrizaje, 8, 14, 7)
 
             self.pantalla.blit(self.jugador.image, self.jugador.rect)
 
@@ -542,8 +540,9 @@ class Pantalla_Jugar2(Pantalla):
 
             if self.jugador.terminar_rotar:
                 self.pintar_texto_ganador()
-                if tiempo_juego >= 30:
-                    return "RECORDS"
+                for event in pg.event.get():
+                    if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                        return "RECORDS"
 
             if self.jugador.vidas <= 0:
                 print("Has muerto")
@@ -615,6 +614,8 @@ class Pantalla_Jugar2(Pantalla):
             n_puntos = (asteroid + n_puntos) - n_puntos
             asteroide = Asteroide(n_puntos)
             self.asteroides.add(asteroide)
+            # if asteroide.rect.right < 0:
+            #     self.puntuacion += 15
 
     def pintar_asteroides(self):
         self.asteroides.update()
@@ -624,17 +625,18 @@ class Pantalla_Jugar2(Pantalla):
         if not aterrizar:
             hit = pg.sprite.spritecollide(self.jugador, self.asteroides, True)
             if hit:
+                self.sonido_explosion()
                 self.jugador.nave_golpeada()
                 self.jugador.vidas -= 1
 
             for asteroide in self.asteroides.sprites():
-                if asteroide.rect.right < 0:
+                if asteroide.rect.x < -35:
                     if not self.jugador.nave_esconder:
                         Asteroide.puntuacion += puntos
-                    self.asteroides.remove(asteroide)
+                    # self.asteroides.remove(asteroide)
 
-            if len(self.asteroides.sprites()) < 3:
-                self.crear_asteroides(10, 20, 6)
+            # if len(self.asteroides.sprites()) < 3:
+            #     self.crear_asteroides(8, 14, 7)
 
         else:
             self.asteroides.clear(self.pantalla, self.pantalla)
@@ -649,13 +651,50 @@ class Pantalla_Jugar2(Pantalla):
 
 
 class Pantalla_Puntuacion(Pantalla):
+    def __init__(self, pantalla: pg.Surface):
+
+        super().__init__(pantalla)
+        imagen_historia = os.path.join(
+            "resources", "images", "fondo_pantalla_records.jpg")
+        self.pantalla_records = pg.image.load(imagen_historia)
+
     def bucle_principal(self):
+
         super().bucle_principal()
         salir = False
+        self.musica_fondo()
+        temporizador = 0
         while not salir:
+            print(pg.time.get_ticks())
             for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    return True
-            self.pantalla.fill((0, 0, 99))
+                if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
+                    return "SALIR"
+                if event.type == pg.KEYDOWN and event.key == pg.K_b:
+                    return "B"
+
+                if event.type == pg.KEYDOWN and event.key == pg.K_a:  # ESTO SIRVE PARA PARAR LA MUSICA PULSANDO A
+                    if pg.mixer.music.get_busy():
+                        pg.mixer.music.stop()
+                    else:
+                        pg.mixer_music.play(-1, 0.0)
+
+                cambio_pantalla = temporizador + 1
+                pg.time.set_timer(cambio_pantalla, 600)
+                if temporizador == 1:
+                    return "INICIO"
+            self.pintar_fondo()
+
             pg.display.flip()
         return False
+
+    def musica_fondo(self):
+        pg.mixer.init()
+        musica_fondo = os.path.join(
+            "resources", "sounds", "musica_instrucciones.mp3")
+        pg.mixer.music.load(musica_fondo)
+        pg.mixer.music.set_volume(0.75)
+        pg.mixer.music.play(-1, 0.0)
+
+    def pintar_fondo(self):
+
+        self.pantalla.blit(self.pantalla_records, (0, 0))

@@ -99,7 +99,13 @@ class The_Quest:
             if pantalla_actual == Jugar2:
                 if resultado_bucle == "SALIR":
                     pantalla_actual = "SALIR"
-                if resultado_bucle == "Records":
+                if resultado_bucle == "RECORDS":
                     pantalla_actual = Puntuacion
+
+            if pantalla_actual == Puntuacion:
+                if resultado_bucle == "SALIR":
+                    pantalla_actual = "SALIR"
+                if resultado_bucle == "INICIO":
+                    pantalla_actual == Inicio
         pg.quit
         return
