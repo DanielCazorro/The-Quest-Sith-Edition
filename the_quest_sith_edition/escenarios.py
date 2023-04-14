@@ -3,7 +3,7 @@ import sys
 import pygame as pg
 from random import randint
 
-from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA, COLOR_AMARILLO, COLOR_BLANCO, COLOR_ROJO, direccion, FPS
+from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA, COLOR_AMARILLO, COLOR_BLANCO, COLOR_ROJO, DIRECCION, FPS
 from .objects import Asteroide, Nave, Planeta
 from .records import Base_Gestion, CajaTexto
 
@@ -555,7 +555,6 @@ class Pantalla_Jugar2(Pantalla):
 
     def pintar_fondo(self):
 
-        self.pantalla.fill((0, 0, 0))
         self.pantalla.blit(self.pantalla_jugar, (0, 0))
 
     def musica_fondo(self):
@@ -661,7 +660,7 @@ class Pantalla_Puntuacion(Pantalla):
         self.pantalla_records = pg.image.load(imagen_historia)
 
         # self.config = CajaTexto()
-        self.base = Base_Gestion(direccion)
+        self.base = Base_Gestion(DIRECCION)
         self.puntuaciones = []
         self.nombres_puntuacion = []
         self.puntos_puntuacion = []
@@ -735,7 +734,6 @@ class Pantalla_Puntuacion(Pantalla):
         pg.draw.rect(self.pantalla, color, input_rect)
 
     def blitRecords(self, puntos, nomb, render1, render2):
-        '''Con este metodo se pintan los datos en pantalla de la BBDD'''
 
         saltoDeLinea = 0
         separacionX = 270
