@@ -314,7 +314,7 @@ class Pantalla_Jugar(Pantalla):
         super().__init__(pantalla)
 
         self.jugador = Nave()
-
+        # self.puntuacion = puntuacion
         imagen_jugar = os.path.join(
             "resources", "images", "fondo_pantalla_jugar.jpg")
         self.pantalla_jugar = pg.image.load(imagen_jugar)
@@ -329,7 +329,6 @@ class Pantalla_Jugar(Pantalla):
     def bucle_principal(self):
 
         ticks_juego = pg.time.get_ticks()
-
         # PONER EN EL INIT
         salir = False
         aterrizaje = False
@@ -442,6 +441,8 @@ class Pantalla_Jugar(Pantalla):
             n_puntos = (asteroid + n_puntos) - n_puntos
             asteroide = Asteroide(n_puntos)
             self.asteroides.add(asteroide)
+            if asteroide.rect.right < 0:
+                self.puntuacion += 10
 
     def pintar_asteroides(self):
         self.asteroides.update()
@@ -455,10 +456,10 @@ class Pantalla_Jugar(Pantalla):
                 self.jugador.vidas -= 1
 
             for asteroide in self.asteroides.sprites():
-                if asteroide.rect.right < 0:
+                if asteroide.rect.x < 0:
                     if not self.jugador.nave_esconder:
                         Asteroide.puntuacion += puntos
-                    self.asteroides.remove(asteroide)
+                    # self.asteroides.remove(asteroide)
 
             if len(self.asteroides.sprites()) < 3:
                 self.crear_asteroides(5, 10, 5)
