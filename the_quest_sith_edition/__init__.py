@@ -9,3 +9,4 @@ COLOR_ROJO = (208, 23, 42)
 # Número de FPS a los que se ejecuta el juego
 FPS = 120
 PUNTOS = 0
+direccion = 'data/records.db'

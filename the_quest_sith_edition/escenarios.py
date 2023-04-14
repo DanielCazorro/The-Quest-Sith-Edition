@@ -1,9 +1,11 @@
 import os
+import sys
 import pygame as pg
 from random import randint
 
-from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA, COLOR_AMARILLO, COLOR_BLANCO, COLOR_ROJO, FPS
-from .objects import Nave, Asteroide, Planeta
+from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA, COLOR_AMARILLO, COLOR_BLANCO, COLOR_ROJO, direccion, FPS
+from .objects import Asteroide, Nave, Planeta
+from .records import Base_Gestion, CajaTexto
 
 
 class Pantalla:
@@ -658,34 +660,47 @@ class Pantalla_Puntuacion(Pantalla):
             "resources", "images", "fondo_pantalla_records.jpg")
         self.pantalla_records = pg.image.load(imagen_historia)
 
+        # self.config = CajaTexto()
+        self.base = Base_Gestion(direccion)
+        self.puntuaciones = []
+        self.nombres_puntuacion = []
+        self.puntos_puntuacion = []
+        self.listNombres_render = []
+        self.listPuntos_render = []
+
     def bucle_principal(self):
 
-        super().bucle_principal()
         salir = False
-        self.musica_fondo()
-        temporizador = 0
+
+        self.carga_records()
+
+        for nombre in self.nombres_puntuacion:
+            self.texto_renderizado = self.historia(
+                str(nombre), True, COLOR_BLANCO)
+            self.listNombres_render.append(self.texto_renderizado)
+
+        for punto in self.puntos_puntuacion:
+            self.punto_renderizado = self.historia(
+                str(punto), True, COLOR_BLANCO)
+            self.listPuntos_render.append(self.punto_renderizado)
+
         while not salir:
-            print(pg.time.get_ticks())
             for event in pg.event.get():
-                if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
-                    return "SALIR"
-                if event.type == pg.KEYDOWN and event.key == pg.K_b:
-                    return "B"
+                if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
+                    sys.exit()
 
-                if event.type == pg.KEYDOWN and event.key == pg.K_a:  # ESTO SIRVE PARA PARAR LA MUSICA PULSANDO A
-                    if pg.mixer.music.get_busy():
-                        pg.mixer.music.stop()
-                    else:
-                        pg.mixer_music.play(-1, 0.0)
+                if event.type == pg.QUIT:
+                    sys.exit()
 
-                cambio_pantalla = temporizador + 1
-                pg.time.set_timer(cambio_pantalla, 600)
-                if temporizador == 1:
-                    return "INICIO"
-            self.pintar_fondo()
+            self.pantalla.blit(self.pantalla_records, (0, 0))
+            self.textoSuperior()
+
+            self.blitRecords(self.listNombres_render, self.listPuntos_render,
+                             self.texto_renderizado, self.punto_renderizado)
+            self.textoInferior()
+            self.mensajeSalir()
 
             pg.display.flip()
-        return False
 
     def musica_fondo(self):
         pg.mixer.init()
@@ -698,3 +713,76 @@ class Pantalla_Puntuacion(Pantalla):
     def pintar_fondo(self):
 
         self.pantalla.blit(self.pantalla_records, (0, 0))
+
+    def mensajeSalir(self):
+        mensaje = "Pulsa (ESC) para salir"
+        text_render = pg.font.Font.render(
+            self.historia, mensaje, True, COLOR_BLANCO)
+        text_width = text_render.get_width()
+        pos_x = (ANCHO_PANTALLA - text_width)/2
+        pos_y = (ALTO_PANTALLA - 100)
+        self.pantalla.blit(text_render, (pos_x, pos_y))
+
+    def inputBox(self):
+
+        self.texto_usuario = ""
+        text_render = pg.font.Font.render(
+            self.historia, self.texto_usuario, True, COLOR_AMARILLO)
+        self.pantalla.blit(text_render, (0, 0))
+
+        input_rect = pg.Rect(200, 200, 140, 32)
+        color = pg.Color('lightskyblue3')
+        pg.draw.rect(self.pantalla, color, input_rect)
+
+    def blitRecords(self, puntos, nomb, render1, render2):
+        '''Con este metodo se pintan los datos en pantalla de la BBDD'''
+
+        saltoDeLinea = 0
+        separacionX = 270
+
+        for i in range(len(puntos)):
+            pos_x = ANCHO_PANTALLA/3 + render1.get_width() - 170
+            pos_y = i * render1.get_height() + saltoDeLinea + 250
+            self.pantalla.blit(puntos[i], (pos_x, pos_y))
+
+        for i2 in range(len(nomb)):
+            pos_x2 = ANCHO_PANTALLA/3 + render2.get_width() + separacionX + 50
+            pos_y2 = i2 * render1.get_height() + saltoDeLinea + 250
+            self.pantalla.blit(nomb[i2], (pos_x2, pos_y2))
+
+    def carga_records(self):
+        self.puntuaciones = self.base.conseguir_puntuacion()
+        for record in self.puntuaciones:
+            record.pop('id')
+            for i in record.values():
+                if isinstance(i, str):
+                    self.nombres_puntuacion.append(i)
+                else:
+                    self.puntos_puntuacion.append(i)
+
+    def textoInferior(self):
+        palabra1 = "Nombre"
+        palabra1_render = pg.font.Font.render(
+            self.historia, palabra1, True, COLOR_BLANCO)
+        palabra1_ancho = palabra1_render.get_width()
+        pos_x1 = (ANCHO_PANTALLA - palabra1_ancho - 700)
+        pos_y1 = ALTO_PANTALLA - 500
+        self.pantalla.blit(palabra1_render, (pos_x1, pos_y1))
+
+        palabra2 = "Puntuancion"
+        palabra2_render = pg.font.Font.render(
+            self.historia, palabra2, True, COLOR_AMARILLO)
+        palabra2_ancho = palabra2_render.get_width()
+        pos_x2 = (ANCHO_PANTALLA - palabra2_ancho - 200)
+        pos_y2 = ALTO_PANTALLA - 500
+        self.pantalla.blit(palabra2_render, (pos_x2, pos_y2))
+
+    def textoSuperior(self):
+
+        mensaje = "PUNTUACION GLOBAL"
+        texto_render = pg.font.Font.render(
+            self.historia, mensaje, True, COLOR_AMARILLO)
+        texto_ancho = texto_render.get_width()
+        pos_x = (ANCHO_PANTALLA - texto_ancho)/2
+        pos_y = ALTO_PANTALLA - 650
+        self.pantalla.blit(texto_render, (pos_x, pos_y))
