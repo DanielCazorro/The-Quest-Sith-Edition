@@ -57,15 +57,10 @@ class Nave(Sprite):
             self.rect.x += self.velocidad_aterrizaje
 
             # Utilizar el centro en lugar de la y
-            # if self.rect.y > (ALTO_PANTALLA - self.rect.height)/2:
-            #     self.rect.y -= self.velocidad_aterrizaje
-            # else:
-            #     self.rect.y += self.velocidad_aterrizaje
-
-            if self.rect.y > self.rect.center:
+            if self.rect.y > (ALTO_PANTALLA - self.rect.height)/2:
                 self.rect.y -= self.velocidad_aterrizaje
-            else:
-                self.rect.y + - self.velocidad_aterrizaje
+            elif self.rect.y < (ALTO_PANTALLA - self.rect.height)/2:
+                self.rect.y += self.velocidad_aterrizaje
 
             if self.rect.x > ANCHO_PANTALLA/2 + 50:
                 self.rect.x = ANCHO_PANTALLA/2 + 50
@@ -110,11 +105,14 @@ class Asteroide(Sprite):
 
         super().__init__()
         self.puntos = puntuacion
+        # self.width = randrange(30, 100)
+        # self.height = randrange(30, 100)
         imagen_asteroide = os.path.join(
             "resources", "images", "asteroide.png")
         self.image = pg.image.load(imagen_asteroide)
+        # self.image = pg.transform.scale(self.image, (self.width, self.height))
 
-        # FIXME: Arreglar los asteroides, para que no cargue al disco duro cada vez, guadarlo antes y luego llamarlo
+        # # FIXME: Arreglar los asteroides, para que no cargue al disco duro cada vez, guadarlo antes y luego llamarlo
         self.asteroide_aleatorio = randrange(0, 3)
         if self.asteroide_aleatorio == 0:
             self.image = pg.transform.scale(self.image, self.asteroide_s)
@@ -127,6 +125,8 @@ class Asteroide(Sprite):
             self.radius = 50
 
         self.rect = self.image.get_rect()
+        # self.rect = self.image.get_rect(midbottom=(
+        #     ANCHO_PANTALLA - 50, randrange(0, ALTO_PANTALLA - self.height - 10)))
         self.margen_asteroide = (ALTO_PANTALLA - self.rect.height)
         self.rect.y = randrange(0, self.margen_asteroide)
         self.rect.x = ANCHO_PANTALLA + self.rect.width
@@ -137,10 +137,14 @@ class Asteroide(Sprite):
 
         self.rect.x -= self.velocidad_x
 
-        if self.rect.top == 0:
-            self.rect.y = 50
-        if self.rect.bottom == ALTO_PANTALLA:
-            self.rect.y = ALTO_PANTALLA - 50
+        if self.rect.right < 10:
+            self.rect.y = randrange(0, self.margen_asteroide)
+            self.rect.x = ANCHO_PANTALLA + self.rect.width
+            self.velocidad_x = randrange(2, 6)
+            # if self.rect.top == 0:
+            #     self.rect.y = 50
+            # if self.rect.bottom == ALTO_PANTALLA:
+            #     self.rect.y = ALTO_PANTALLA - 50
 
 
 class Planeta(Sprite):
