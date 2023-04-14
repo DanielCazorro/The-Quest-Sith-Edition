@@ -456,7 +456,7 @@ class Pantalla_Jugar(Pantalla):
                 self.jugador.vidas -= 1
 
             for asteroide in self.asteroides.sprites():
-                if asteroide.rect.x < 0:
+                if asteroide.rect.x < -35:
                     if not self.jugador.nave_esconder:
                         Asteroide.puntuacion += puntos
                     # self.asteroides.remove(asteroide)
