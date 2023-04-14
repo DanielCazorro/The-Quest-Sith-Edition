@@ -314,27 +314,20 @@ class Pantalla_Jugar(Pantalla):
         super().__init__(pantalla)
 
         self.jugador = Nave()
+
         imagen_jugar = os.path.join(
             "resources", "images", "fondo_pantalla_jugar.jpg")
         self.pantalla_jugar = pg.image.load(imagen_jugar)
 
-        # FIXME:
         imagen_planeta = pg.image.load(os.path.join(
             "resources", "images", "planeta.png"))
         self.planeta = Planeta(imagen_planeta)
 
-        # self.asteroides = []
-        # self.numero_asteroides = 0
-        # Aquí quizás hacer una variable general # FIXME:
-        # self.maximo_asteroides = 40
         self.asteroides = pg.sprite.Group()
-        for asteroid in range(8):
-            self.asteroide = Asteroide(self)
-            self.asteroides.add(self.asteroide)
-        # self.crear_asteroides(5, 10, 5)
+        self.crear_asteroides(5, 10, 5)
 
     def bucle_principal(self):
-        # super().bucle_principal()  # FIXME: Quitar
+
         ticks_juego = pg.time.get_ticks()
 
         # PONER EN EL INIT
@@ -358,25 +351,15 @@ class Pantalla_Jugar(Pantalla):
                     else:
                         pg.mixer_music.play(-1, 0.0)
 
-            if not aterrizaje:
-                self.asteroides.update()
-            self.asteroides.draw(self.pantalla)
-            # if self.numero_asteroides < self.maximo_asteroides:
-            #     self.asteroides.append(Asteroide())
-            #     self.numero_asteroides += 1
-
-            # for asteroid in self.asteroides:
-            #     Asteroide.update()
-            #     self.pantalla.blit(asteroid.image, asteroid.rect)
-
             self.pintar_fondo()
             self.pintar_vidas()
             self.pintar_puntuacion()
             self.pintar_texto_musica()
             self.jugador.update()
             self.aparece_planeta(aterrizaje)
-            # self.pintar_asteroides()
-            # self.colisionar_y_puntos(aterrizaje, 5, 10, 5)
+            if not aterrizaje:
+                self.pintar_asteroides()
+            self.colisionar_y_puntos(aterrizaje, 5, 10, 5)
 
             self.pantalla.blit(self.jugador.image, self.jugador.rect)
 
@@ -460,9 +443,9 @@ class Pantalla_Jugar(Pantalla):
             asteroide = Asteroide(n_puntos)
             self.asteroides.add(asteroide)
 
-    # def pintar_asteroides(self):
-    #     self.asteroides.update()
-    #     self.asteroides.draw(self.pantalla)
+    def pintar_asteroides(self):
+        self.asteroides.update()
+        self.asteroides.draw(self.pantalla)
 
     def colisionar_y_puntos(self, aterrizar, min, max, puntos):
         if not aterrizar:
