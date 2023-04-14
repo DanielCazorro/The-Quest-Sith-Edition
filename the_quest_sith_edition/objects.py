@@ -57,9 +57,9 @@ class Nave(Sprite):
             self.rect.x += self.velocidad_aterrizaje
 
             # Utilizar el centro en lugar de la y
-            if self.rect.y > (ALTO_PANTALLA - self.rect.height)/2:
+            if self.rect.centery > (ALTO_PANTALLA - self.rect.height)/2:
                 self.rect.y -= self.velocidad_aterrizaje
-            elif self.rect.y < (ALTO_PANTALLA - self.rect.height)/2:
+            elif self.rect.centery < (ALTO_PANTALLA - self.rect.height)/2:
                 self.rect.y += self.velocidad_aterrizaje
 
             if self.rect.x > ANCHO_PANTALLA/2 + 50:
