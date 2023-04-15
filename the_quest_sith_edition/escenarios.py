@@ -56,7 +56,7 @@ class Pantalla_Inicio(Pantalla):
         self.musica_fondo()
         temporizador = 0
         while not salir:
-            print(pg.time.get_ticks())
+            # print(pg.time.get_ticks())
             for event in pg.event.get():
                 if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
                     return "SALIR"
@@ -366,8 +366,8 @@ class Pantalla_Jugar(Pantalla):
             if not aterrizaje:
                 self.pintar_asteroides()
             self.colisionar_y_puntos(aterrizaje, 5, 10, 5)
-
-            self.pantalla.blit(self.jugador.image, self.jugador.rect)
+            if self.jugador.rect.x != 690:
+                self.pantalla.blit(self.jugador.image, self.jugador.rect)
 
             if tiempo_juego >= 25:
                 aterrizaje = True
@@ -534,8 +534,8 @@ class Pantalla_Jugar2(Pantalla):
             if not aterrizaje:
                 self.pintar_asteroides()
             self.colisionar_y_puntos(aterrizaje, 8, 14, 7)
-
-            self.pantalla.blit(self.jugador.image, self.jugador.rect)
+            if self.jugador.rect.x != 690:
+                self.pantalla.blit(self.jugador.image, self.jugador.rect)
 
             if tiempo_juego >= 25:
                 aterrizaje = True
