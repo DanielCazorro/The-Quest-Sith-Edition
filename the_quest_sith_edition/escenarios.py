@@ -1,11 +1,10 @@
 import os
-import sys
 import pygame as pg
 from random import randint
 
 from the_quest_sith_edition import ANCHO_PANTALLA, ALTO_PANTALLA, COLOR_AMARILLO, COLOR_BLANCO, COLOR_ROJO, DIRECCION, FPS
 from .objects import Asteroide, Nave, Planeta
-from .records import Base_Gestion, CajaTexto
+from .records import agregar_record, rec_puntuaciones
 
 
 class Pantalla:
@@ -66,8 +65,6 @@ class Pantalla_Inicio(Pantalla):
                     return "H"
                 if event.type == pg.KEYDOWN and event.key == pg.K_c:
                     return "C"
-                # if pg.time.get_ticks() > 6000:  # TODO: Cambiar este número a algo mas normal
-                #     return "R"
 
                 if event.type == pg.KEYDOWN and event.key == pg.K_a:  # ESTO SIRVE PARA PARAR LA MUSICA PULSANDO A
                     if pg.mixer.music.get_busy():
@@ -317,11 +314,12 @@ class Pantalla_Historia(Pantalla):
 
 class Pantalla_Jugar(Pantalla):
 
-    def __init__(self, pantalla):
+    def __init__(self, pantalla, vidas=3, puntuacion=0):
         super().__init__(pantalla)
 
         self.jugador = Nave()
-        # self.puntuacion = puntuacion
+        Asteroide.puntuacion = puntuacion
+        self.vidas = vidas
         imagen_jugar = os.path.join(
             "resources", "images", "fondo_pantalla_jugar.jpg")
         self.pantalla_jugar = pg.image.load(imagen_jugar)
@@ -336,11 +334,9 @@ class Pantalla_Jugar(Pantalla):
     def bucle_principal(self):
 
         ticks_juego = pg.time.get_ticks()
-        # PONER EN EL INIT
         salir = False
         aterrizaje = False
         self.musica_fondo()
-
         self.jugador.vidas = 3
 
         while not salir:
@@ -379,15 +375,15 @@ class Pantalla_Jugar(Pantalla):
                         return "PASAS"
 
             if self.jugador.vidas <= 0:
-                print("Has muerto")
-                # Aquí iría un stop, y que se elija si camibar de pantalla o no
-                return "0"
+                self.iniciales = self.pedir_iniciales()
+                if self.iniciales != "salir":
+                    agregar_record(self.iniciales, Asteroide.puntuacion)
+                return ("RECORDS")
 
             pg.display.flip()
 
     def pintar_fondo(self):
 
-        # self.pantalla.fill((0, 0, 0)) # TODO: Todo esto qeu he ido copiando de arriba, sobra puesto que la pintalla no hay que pintarla, ya tiene una imagen de fondo
         self.pantalla.blit(self.pantalla_jugar, (0, 0))
 
     def pintar_vidas(self):
@@ -400,8 +396,7 @@ class Pantalla_Jugar(Pantalla):
         self.pantalla.blit(texto, (pos_x, pos_y))
 
     def pintar_puntuacion(self):
-        puntuacion = Asteroide.puntuacion
-        mensaje = f"PUNTOS = {puntuacion}"
+        mensaje = f"PUNTOS = {Asteroide.puntuacion}"
         texto = self.extra_musica.render(mensaje, False, (COLOR_AMARILLO))
         pos_x = ANCHO_PANTALLA / 40
         pos_y = ALTO_PANTALLA - 50
@@ -439,17 +434,11 @@ class Pantalla_Jugar(Pantalla):
 
     def crear_asteroides(self, min_asteroide, max_asteroide, n_puntos):
 
-        # if not aterrizaje:
-        #     num_asteroides = randint(min_asteroide, max_asteroide)
-        # else:
-        #     num_asteroides = 0
         num_asteroides = randint(min_asteroide, max_asteroide)
         for asteroid in range(num_asteroides):
             n_puntos = (asteroid + n_puntos) - n_puntos
             asteroide = Asteroide(n_puntos)
             self.asteroides.add(asteroide)
-            # if asteroide.rect.right < 0:
-            # self.puntuacion += 10
 
     def pintar_asteroides(self):
         self.asteroides.update()
@@ -459,6 +448,7 @@ class Pantalla_Jugar(Pantalla):
         if not aterrizar:
             hit = pg.sprite.spritecollide(self.jugador, self.asteroides, True)
             if hit:
+                self.sonido_explosion()
                 self.jugador.nave_golpeada()
                 self.jugador.vidas -= 1
 
@@ -466,10 +456,6 @@ class Pantalla_Jugar(Pantalla):
                 if asteroide.rect.x < -35:
                     if not self.jugador.nave_esconder:
                         Asteroide.puntuacion += puntos
-                    # self.asteroides.remove(asteroide)
-
-            # if len(self.asteroides.sprites()) < 3:
-            #     self.crear_asteroides(5, 10, 5)
 
         else:
             self.asteroides.clear(self.pantalla, self.pantalla)
@@ -482,6 +468,37 @@ class Pantalla_Jugar(Pantalla):
         pos_y = ALTO_PANTALLA * 5/8
         self.pantalla.blit(texto, (pos_x, pos_y))
 
+    def pedir_iniciales(self):
+        iniciales = ""
+        salir = False
+
+        while not salir:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    return "salir"
+                elif event.type == pg.KEYDOWN:
+                    if event.unicode.isalpha() and len(iniciales) < 3:
+                        iniciales += event.unicode.upper()
+                    elif event.key == pg.K_BACKSPACE and len(iniciales) > 0:
+                        iniciales = iniciales[:-1]
+                    elif event.key == pg.K_SPACE and len(iniciales) == 3:
+                        return iniciales
+
+            self.pintar_fondo()
+
+            mensaje = "ingrese sus iniciales: " + iniciales
+            texto = self.titulo.render(mensaje, True, (255, 255, 255))
+            pos_x = ANCHO_PANTALLA / 2 - texto.get_width() / 2
+            pos_y = ALTO_PANTALLA / 2 - texto.get_height() / 2
+            self.pantalla.blit(texto, (pos_x, pos_y))
+            mensaje2 = "Pulsa espacio para continuar"
+            texto = self.titulo.render(mensaje2, True, (255, 255, 255))
+            pos_x2 = ANCHO_PANTALLA / 2 - texto.get_width() / 2
+            pos_y2 = ALTO_PANTALLA * 0.60 - texto.get_height() / 2
+            self.pantalla.blit(texto, (pos_x2, pos_y2))
+
+            pg.display.flip()
+
 
 class Pantalla_Jugar2(Pantalla):
 
@@ -489,7 +506,6 @@ class Pantalla_Jugar2(Pantalla):
         super().__init__(pantalla)
 
         self.jugador = Nave()
-        # self.puntuacion = puntuacion
         imagen_jugar = os.path.join(
             "resources", "images", "fondo_pantalla_jugar2.jpg")
         self.pantalla_jugar = pg.image.load(imagen_jugar)
@@ -504,7 +520,6 @@ class Pantalla_Jugar2(Pantalla):
     def bucle_principal(self):
 
         ticks_juego = pg.time.get_ticks()
-        # PONER EN EL INIT
         salir = False
         aterrizaje = False
         self.musica_fondo()
@@ -547,10 +562,10 @@ class Pantalla_Jugar2(Pantalla):
                         return "RECORDS"
 
             if self.jugador.vidas <= 0:
-                print("Has muerto")
-                # Aquí iría un stop, y que se elija si camibar de pantalla o no
-                return "0"
-
+                self.iniciales = self.pedir_iniciales()
+                if self.iniciales != "salir":
+                    agregar_record(self.iniciales, Asteroide.puntuacion)
+                return ("RECORDS")
             pg.display.flip()
 
     def pintar_fondo(self):
@@ -606,17 +621,11 @@ class Pantalla_Jugar2(Pantalla):
 
     def crear_asteroides(self, min_asteroide, max_asteroide, n_puntos):
 
-        # if not aterrizaje:
-        #     num_asteroides = randint(min_asteroide, max_asteroide)
-        # else:
-        #     num_asteroides = 0
         num_asteroides = randint(min_asteroide, max_asteroide)
         for asteroid in range(num_asteroides):
             n_puntos = (asteroid + n_puntos) - n_puntos
             asteroide = Asteroide(n_puntos)
             self.asteroides.add(asteroide)
-            # if asteroide.rect.right < 0:
-            #     self.puntuacion += 15
 
     def pintar_asteroides(self):
         self.asteroides.update()
@@ -652,54 +661,12 @@ class Pantalla_Jugar2(Pantalla):
 
 
 class Pantalla_Puntuacion(Pantalla):
-    def __init__(self, pantalla: pg.Surface):
-
+    def __init__(self, pantalla):
         super().__init__(pantalla)
         imagen_historia = os.path.join(
             "resources", "images", "fondo_pantalla_records.jpg")
         self.pantalla_records = pg.image.load(imagen_historia)
-
-        # self.config = CajaTexto()
-        self.base = Base_Gestion(DIRECCION)
-        self.puntuaciones = []
-        self.nombres_puntuacion = []
-        self.puntos_puntuacion = []
-        self.listNombres_render = []
-        self.listPuntos_render = []
-
-    def bucle_principal(self):
-
-        salir = False
-
-        self.carga_records()
-
-        for nombre in self.nombres_puntuacion:
-            self.texto_renderizado = self.historia(
-                str(nombre), True, COLOR_BLANCO)
-            self.listNombres_render.append(self.texto_renderizado)
-
-        for punto in self.puntos_puntuacion:
-            self.punto_renderizado = self.historia(
-                str(punto), True, COLOR_BLANCO)
-            self.listPuntos_render.append(self.punto_renderizado)
-
-        while not salir:
-            for event in pg.event.get():
-                if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
-                    sys.exit()
-
-                if event.type == pg.QUIT:
-                    sys.exit()
-
-            self.pantalla.blit(self.pantalla_records, (0, 0))
-            self.textoSuperior()
-
-            self.blitRecords(self.listNombres_render, self.listPuntos_render,
-                             self.texto_renderizado, self.punto_renderizado)
-            self.textoInferior()
-            self.mensajeSalir()
-
-            pg.display.flip()
+        self.records = rec_puntuaciones()
 
     def musica_fondo(self):
         pg.mixer.init()
@@ -713,74 +680,50 @@ class Pantalla_Puntuacion(Pantalla):
 
         self.pantalla.blit(self.pantalla_records, (0, 0))
 
-    def mensajeSalir(self):
-        mensaje = "Pulsa (ESC) para salir"
-        text_render = pg.font.Font.render(
-            self.historia, mensaje, True, COLOR_BLANCO)
-        text_width = text_render.get_width()
-        pos_x = (ANCHO_PANTALLA - text_width)/2
-        pos_y = (ALTO_PANTALLA - 100)
-        self.pantalla.blit(text_render, (pos_x, pos_y))
+    def mostrar_puntuaciones(self):
+        ruta_font = os.path.join("resources", "fonts", "fuente-extra.ttf")
+        self.font = pg.font.Font(ruta_font, 60)
+        espacio_vertical = 80
+        margen_izquierdo = 150
+        margen_superior = 100
 
-    def inputBox(self):
+        mensaje = "Pulsa espacio para continuar"
+        texto = self.font.render(mensaje, True, (255, 255, 255))
+        pos_x = ANCHO_PANTALLA - texto.get_width()/2
+        pos_y = ALTO_PANTALLA * 0.60
+        self.pantalla.blit(texto, (pos_x, pos_y))
 
-        self.texto_usuario = ""
-        text_render = pg.font.Font.render(
-            self.historia, self.texto_usuario, True, COLOR_AMARILLO)
-        self.pantalla.blit(text_render, (0, 0))
+        encabezado_nombre = self.font.render("Nombre", True, (255, 255, 255))
+        encabezado_record = self.font.render("Record", True, (255, 255, 255))
+        self.pantalla.blit(encabezado_nombre,
+                           (margen_izquierdo, margen_superior))
+        self.pantalla.blit(encabezado_record, (ANCHO_PANTALLA //
+                           2 + margen_izquierdo, margen_superior))
 
-        input_rect = pg.Rect(200, 200, 140, 32)
-        color = pg.Color('lightskyblue3')
-        pg.draw.rect(self.pantalla, color, input_rect)
+        for index, record in enumerate(self.records):
+            texto_nombre = self.font.render(
+                record["nombre"], True, (255, 255, 255))
+            texto_record = self.font.render(
+                str(record["record"]), True, (255, 255, 255))
 
-    def blitRecords(self, puntos, nomb, render1, render2):
+            y = margen_superior + espacio_vertical * (index + 1)
+            self.pantalla.blit(texto_nombre, (margen_izquierdo, y))
+            self.pantalla.blit(
+                texto_record, (ANCHO_PANTALLA // 2 + margen_izquierdo, y))
 
-        saltoDeLinea = 0
-        separacionX = 270
+            if index >= 5:
+                break
 
-        for i in range(len(puntos)):
-            pos_x = ANCHO_PANTALLA/3 + render1.get_width() - 170
-            pos_y = i * render1.get_height() + saltoDeLinea + 250
-            self.pantalla.blit(puntos[i], (pos_x, pos_y))
+    def bucle_principal(self):
+        salir = False
+        while not salir:
+            self.pintar_fondo()
+            self.mostrar_puntuaciones()
 
-        for i2 in range(len(nomb)):
-            pos_x2 = ANCHO_PANTALLA/3 + render2.get_width() + separacionX + 50
-            pos_y2 = i2 * render1.get_height() + saltoDeLinea + 250
-            self.pantalla.blit(nomb[i2], (pos_x2, pos_y2))
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    return "salir"
+                elif event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                    return "INICIO"
 
-    def carga_records(self):
-        self.puntuaciones = self.base.conseguir_puntuacion()
-        for record in self.puntuaciones:
-            record.pop('id')
-            for i in record.values():
-                if isinstance(i, str):
-                    self.nombres_puntuacion.append(i)
-                else:
-                    self.puntos_puntuacion.append(i)
-
-    def textoInferior(self):
-        palabra1 = "Nombre"
-        palabra1_render = pg.font.Font.render(
-            self.historia, palabra1, True, COLOR_BLANCO)
-        palabra1_ancho = palabra1_render.get_width()
-        pos_x1 = (ANCHO_PANTALLA - palabra1_ancho - 700)
-        pos_y1 = ALTO_PANTALLA - 500
-        self.pantalla.blit(palabra1_render, (pos_x1, pos_y1))
-
-        palabra2 = "Puntuancion"
-        palabra2_render = pg.font.Font.render(
-            self.historia, palabra2, True, COLOR_AMARILLO)
-        palabra2_ancho = palabra2_render.get_width()
-        pos_x2 = (ANCHO_PANTALLA - palabra2_ancho - 200)
-        pos_y2 = ALTO_PANTALLA - 500
-        self.pantalla.blit(palabra2_render, (pos_x2, pos_y2))
-
-    def textoSuperior(self):
-
-        mensaje = "PUNTUACION GLOBAL"
-        texto_render = pg.font.Font.render(
-            self.historia, mensaje, True, COLOR_AMARILLO)
-        texto_ancho = texto_render.get_width()
-        pos_x = (ANCHO_PANTALLA - texto_ancho)/2
-        pos_y = ALTO_PANTALLA - 650
-        self.pantalla.blit(texto_render, (pos_x, pos_y))
+            pg.display.flip()

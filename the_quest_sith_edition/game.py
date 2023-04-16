@@ -94,6 +94,8 @@ class The_Quest:
                     pantalla_actual = Inicio
                 if resultado_bucle == "PASAS":
                     pantalla_actual = Jugar2
+                if resultado_bucle == "RECORDS":
+                    pantalla_actual = Puntuacion
 
             # Este es el bucle de la elección de la Pantalla_juego2
             if pantalla_actual == Jugar2:
