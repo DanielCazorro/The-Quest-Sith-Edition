@@ -783,7 +783,8 @@ class Pantalla_Puntuacion(Pantalla):
             for event in pg.event.get():
                 if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
                     return "SALIR"
-                if event.type == pg.KEYDOWN and event.key == pg.K_b:
+                if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                    print("HISTORIA")
                     return "B"
 
                 if event.type == pg.KEYDOWN and event.key == pg.K_a:  # ESTO SIRVE PARA PARAR LA MUSICA PULSANDO A
@@ -793,8 +794,9 @@ class Pantalla_Puntuacion(Pantalla):
                         pg.mixer_music.play(-1, 0.0)
 
             self.pantalla.fill((0, 0, 0))
-            self.mostrar_puntuaciones()
+
             self.pintar_fondo()
+            self.mostrar_puntuaciones()
             self.pintar_texto_iniciar()
             self.pintar_texto_musica()
             # self.pintar_historia()
@@ -809,14 +811,14 @@ class Pantalla_Puntuacion(Pantalla):
         margen_izquierdo = 150
         margen_superior = 100
 
-        mensaje = "Pulsa espacio para volver a la pantalla de inicio"
-        texto = self.font.render(mensaje, True, (255, 255, 255))
-        pos_x = ANCHO_PANTALLA - texto.get_width()/2
-        pos_y = ALTO_PANTALLA * 0.60
-        self.pantalla.blit(texto, (pos_x, pos_y))
+        # mensaje = "Pulsa espacio para volver a la pantalla de inicio"
+        # texto = self.font.render(mensaje, True, (COLOR_BLANCO))
+        # pos_x = ANCHO_PANTALLA - texto.get_width()/2
+        # pos_y = ALTO_PANTALLA * 0.60
+        # self.pantalla.blit(texto, (pos_x, pos_y))
 
-        encabezado_nombre = self.font.render("Nombre", True, (255, 255, 255))
-        encabezado_record = self.font.render("Record", True, (255, 255, 255))
+        encabezado_nombre = self.font.render("Nombre", True, (COLOR_BLANCO))
+        encabezado_record = self.font.render("Record", True, (COLOR_BLANCO))
         self.pantalla.blit(encabezado_nombre,
                            (margen_izquierdo, margen_superior))
         self.pantalla.blit(encabezado_record, (ANCHO_PANTALLA //
@@ -848,29 +850,29 @@ class Pantalla_Puntuacion(Pantalla):
 
         self.pantalla.blit(self.pantalla_records, (0, 0))
 
-    def pintar_historia(self):
+    # def pintar_historia(self):
 
-        # TODO: Pensar en hacer un bucle o algo para que aparezcan de una en una las frases
-        lugar_pantalla = [140, 200, 260, 320, 380, 440]
-        frases = ["Hace mucho tiempo, en una galaxia lejana...",
-                  "El terror y la anarquía reinaban en todas partes.",
-                  "Por  suerte, surgieron unos héroes, que lucharon por la libertad...",
-                  "Los Sith. Caballeros nobles y poderosos que luchaban por el orden.",
-                  "Nuestra historia sigue a un gran caballero Sith,",
-                  "Que busca sin descanso a los malvados Jedi por los planetas de la galaxia."]
+    #     # TODO: Pensar en hacer un bucle o algo para que aparezcan de una en una las frases
+    #     lugar_pantalla = [140, 200, 260, 320, 380, 440]
+    #     frases = ["Hace mucho tiempo, en una galaxia lejana...",
+    #               "El terror y la anarquía reinaban en todas partes.",
+    #               "Por  suerte, surgieron unos héroes, que lucharon por la libertad...",
+    #               "Los Sith. Caballeros nobles y poderosos que luchaban por el orden.",
+    #               "Nuestra historia sigue a un gran caballero Sith,",
+    #               "Que busca sin descanso a los malvados Jedi por los planetas de la galaxia."]
 
-        pos_x = ANCHO_PANTALLA - 1200
-        contador_lugar = 0
+    #     pos_x = ANCHO_PANTALLA - 1200
+    #     contador_lugar = 0
 
-        for frase in frases:
-            texto_render = self.historia.render(
-                (frase), True, COLOR_ROJO)
-            self.pantalla.blit(
-                texto_render, (pos_x, lugar_pantalla[contador_lugar]))
-            contador_lugar += 1
+    #     for frase in frases:
+    #         texto_render = self.historia.render(
+    #             (frase), True, COLOR_ROJO)
+    #         self.pantalla.blit(
+    #             texto_render, (pos_x, lugar_pantalla[contador_lugar]))
+    #         contador_lugar += 1
 
     def pintar_texto_iniciar(self):
-        mensaje = "Pulsa <B> para volver a la pantalla de inicio"
+        mensaje = "Pulsa espacio para volver a la pantalla de inicio"
         texto = self.titulo_instrucciones.render(
             mensaje, True, (COLOR_AMARILLO))
         anchura_texto = texto.get_width()

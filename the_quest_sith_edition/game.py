@@ -104,10 +104,11 @@ class The_Quest:
                 if resultado_bucle == "RECORDS":
                     pantalla_actual = Puntuacion
 
+            # Este es el bucle de la elección de la Pantalla_Puntuaciones
             if pantalla_actual == Puntuacion:
                 if resultado_bucle == "SALIR":
                     pantalla_actual = "SALIR"
-                if resultado_bucle == "INICIO":
-                    pantalla_actual == Inicio
+                if resultado_bucle == "B":
+                    pantalla_actual = Inicio
         pg.quit
         return
