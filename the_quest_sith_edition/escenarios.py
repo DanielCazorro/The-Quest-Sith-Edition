@@ -359,8 +359,10 @@ class Pantalla_Jugar(Pantalla):
             self.pintar_texto_musica()
             self.jugador.update()
             self.aparece_planeta(aterrizaje)
+
             if not aterrizaje:
                 self.pintar_asteroides()
+
             self.colisionar_y_puntos(aterrizaje, 5, 10, 5)
             if self.jugador.rect.x != 690:
                 self.pantalla.blit(self.jugador.image, self.jugador.rect)
@@ -687,7 +689,7 @@ class Pantalla_Puntuacion(Pantalla):
         margen_izquierdo = 150
         margen_superior = 100
 
-        mensaje = "Pulsa espacio para continuar"
+        mensaje = "Pulsa espacio para volver a la pantalla de inicio"
         texto = self.font.render(mensaje, True, (255, 255, 255))
         pos_x = ANCHO_PANTALLA - texto.get_width()/2
         pos_y = ALTO_PANTALLA * 0.60
@@ -721,8 +723,8 @@ class Pantalla_Puntuacion(Pantalla):
             self.mostrar_puntuaciones()
 
             for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    return "salir"
+                if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
+                    return "SALIR"
                 elif event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
                     return "INICIO"
 
