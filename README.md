@@ -21,3 +21,10 @@ Para instalar los recursos necesarios en el entorno virtual para poder jugar, ut
 `pip install -r requirements.txt`
 
 En este archivo requirements.txt encontrarás todos los paquetes necesarios.
+
+# Cómo jugar
+
+Para poder jugar, se debe inicializar el archivo main.py
+
+Desde un terminal, escribir el comando `python main.py` desde Windows, o `python3 main.py` desde Linux o Mac
+

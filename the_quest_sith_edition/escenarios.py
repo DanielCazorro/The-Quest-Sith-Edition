@@ -693,25 +693,114 @@ class Pantalla_Jugar2(Pantalla):
             pg.display.flip()
 
 
+# class Pantalla_Puntuacion(Pantalla):
+#     def __init__(self, pantalla):
+#         super().__init__(pantalla)
+#         imagen_historia = os.path.join(
+#             "resources", "images", "fondo_pantalla_records.jpg")
+#         self.pantalla_records = pg.image.load(imagen_historia)
+#         self.records = rec_puntuaciones()
+
+#     def musica_fondo(self):
+#         pg.mixer.init()
+#         musica_fondo = os.path.join(
+#             "resources", "sounds", "musica_instrucciones.mp3")
+#         pg.mixer.music.load(musica_fondo)
+#         pg.mixer.music.set_volume(0.75)
+#         pg.mixer.music.play(-1, 0.0)
+
+#     def pintar_fondo(self):
+
+#         self.pantalla.blit(self.pantalla_records, (0, 0))
+
+#     def mostrar_puntuaciones(self):
+#         ruta_font = os.path.join("resources", "fonts", "fuente-extra.ttf")
+#         self.font = pg.font.Font(ruta_font, 30)
+#         espacio_vertical = 80
+#         margen_izquierdo = 150
+#         margen_superior = 100
+
+#         mensaje = "Pulsa espacio para volver a la pantalla de inicio"
+#         texto = self.font.render(mensaje, True, (255, 255, 255))
+#         pos_x = ANCHO_PANTALLA - texto.get_width()/2
+#         pos_y = ALTO_PANTALLA * 0.60
+#         self.pantalla.blit(texto, (pos_x, pos_y))
+
+#         encabezado_nombre = self.font.render("Nombre", True, (255, 255, 255))
+#         encabezado_record = self.font.render("Record", True, (255, 255, 255))
+#         self.pantalla.blit(encabezado_nombre,
+#                            (margen_izquierdo, margen_superior))
+#         self.pantalla.blit(encabezado_record, (ANCHO_PANTALLA //
+#                            2 + margen_izquierdo, margen_superior))
+
+#         for index, record in enumerate(self.records):
+#             texto_nombre = self.font.render(
+#                 record["nombre"], True, (255, 255, 255))
+#             texto_record = self.font.render(
+#                 str(record["record"]), True, (255, 255, 255))
+
+#             y = margen_superior + espacio_vertical * (index + 1)
+#             self.pantalla.blit(texto_nombre, (margen_izquierdo, y))
+#             self.pantalla.blit(
+#                 texto_record, (ANCHO_PANTALLA // 2 + margen_izquierdo, y))
+
+#             if index >= 5:
+#                 break
+
+#     def bucle_principal(self):
+#         salir = False
+#         while not salir:
+#             self.pintar_fondo()
+#             self.mostrar_puntuaciones()
+
+#             for event in pg.event.get():
+#                 if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
+#                     return "SALIR"
+#                 elif event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+#                     return "INICIO"
+
+#             pg.display.flip()
+
+
 class Pantalla_Puntuacion(Pantalla):
-    def __init__(self, pantalla):
+
+    def __init__(self, pantalla: pg.Surface):
+
         super().__init__(pantalla)
         imagen_historia = os.path.join(
             "resources", "images", "fondo_pantalla_records.jpg")
         self.pantalla_records = pg.image.load(imagen_historia)
         self.records = rec_puntuaciones()
 
-    def musica_fondo(self):
-        pg.mixer.init()
-        musica_fondo = os.path.join(
-            "resources", "sounds", "musica_instrucciones.mp3")
-        pg.mixer.music.load(musica_fondo)
-        pg.mixer.music.set_volume(0.75)
-        pg.mixer.music.play(-1, 0.0)
+    def bucle_principal(self):
 
-    def pintar_fondo(self):
+        super().bucle_principal()
+        salir = False
+        self.musica_fondo()
 
-        self.pantalla.blit(self.pantalla_records, (0, 0))
+        while not salir:
+
+            for event in pg.event.get():
+                if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
+                    return "SALIR"
+                if event.type == pg.KEYDOWN and event.key == pg.K_b:
+                    return "B"
+
+                if event.type == pg.KEYDOWN and event.key == pg.K_a:  # ESTO SIRVE PARA PARAR LA MUSICA PULSANDO A
+                    if pg.mixer.music.get_busy():
+                        pg.mixer.music.stop()
+                    else:
+                        pg.mixer_music.play(-1, 0.0)
+
+            self.pantalla.fill((0, 0, 0))
+            self.mostrar_puntuaciones()
+            self.pintar_fondo()
+            self.pintar_texto_iniciar()
+            self.pintar_texto_musica()
+            # self.pintar_historia()
+            # self.pintar_historia()
+            pg.display.flip()
+        return False
 
     def mostrar_puntuaciones(self):
         ruta_font = os.path.join("resources", "fonts", "fuente-extra.ttf")
@@ -747,16 +836,52 @@ class Pantalla_Puntuacion(Pantalla):
             if index >= 5:
                 break
 
-    def bucle_principal(self):
-        salir = False
-        while not salir:
-            self.pintar_fondo()
-            self.mostrar_puntuaciones()
+    def musica_fondo(self):
+        pg.mixer.init()
+        musica_fondo = os.path.join(
+            "resources", "sounds", "musica_historia.mp3")
+        pg.mixer.music.load(musica_fondo)
+        pg.mixer.music.set_volume(0.75)
+        pg.mixer.music.play(-1, 0.0)
 
-            for event in pg.event.get():
-                if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
-                    return "SALIR"
-                elif event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                    return "INICIO"
+    def pintar_fondo(self):
 
-            pg.display.flip()
+        self.pantalla.blit(self.pantalla_records, (0, 0))
+
+    def pintar_historia(self):
+
+        # TODO: Pensar en hacer un bucle o algo para que aparezcan de una en una las frases
+        lugar_pantalla = [140, 200, 260, 320, 380, 440]
+        frases = ["Hace mucho tiempo, en una galaxia lejana...",
+                  "El terror y la anarquía reinaban en todas partes.",
+                  "Por  suerte, surgieron unos héroes, que lucharon por la libertad...",
+                  "Los Sith. Caballeros nobles y poderosos que luchaban por el orden.",
+                  "Nuestra historia sigue a un gran caballero Sith,",
+                  "Que busca sin descanso a los malvados Jedi por los planetas de la galaxia."]
+
+        pos_x = ANCHO_PANTALLA - 1200
+        contador_lugar = 0
+
+        for frase in frases:
+            texto_render = self.historia.render(
+                (frase), True, COLOR_ROJO)
+            self.pantalla.blit(
+                texto_render, (pos_x, lugar_pantalla[contador_lugar]))
+            contador_lugar += 1
+
+    def pintar_texto_iniciar(self):
+        mensaje = "Pulsa <B> para volver a la pantalla de inicio"
+        texto = self.titulo_instrucciones.render(
+            mensaje, True, (COLOR_AMARILLO))
+        anchura_texto = texto.get_width()
+        pos_x = (ANCHO_PANTALLA - anchura_texto) / 2
+        pos_y = ALTO_PANTALLA - 100
+        self.pantalla.blit(texto, (pos_x, pos_y))
+
+    def pintar_texto_musica(self):
+        mensaje = "Pulsa <a> para pausar/reaundar la música"
+        texto = self.extra_musica.render(mensaje, False, (COLOR_AMARILLO))
+        anchura_texto = texto.get_width()
+        pos_x = ANCHO_PANTALLA - (anchura_texto + 20)
+        pos_y = ALTO_PANTALLA * 1/28
+        self.pantalla.blit(texto, (pos_x, pos_y))
