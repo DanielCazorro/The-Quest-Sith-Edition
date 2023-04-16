@@ -751,7 +751,7 @@ class Pantalla_Puntuacion(Pantalla):
 
     def mostrar_puntuaciones(self):
         ruta_font = os.path.join("resources", "fonts", "fuente-extra.ttf")
-        self.font = pg.font.Font(ruta_font, 30)
+        self.font = pg.font.Font(ruta_font, 27)
         espacio_vertical = 80
         margen_izquierdo = 150
         margen_superior = 100
