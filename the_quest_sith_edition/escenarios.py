@@ -512,10 +512,12 @@ class Pantalla_Jugar(Pantalla):
 
 class Pantalla_Jugar2(Pantalla):
 
-    def __init__(self, pantalla):
+    def __init__(self, pantalla, vidas=3, puntuacion=0):
         super().__init__(pantalla)
 
         self.jugador = Nave()
+        Asteroide.puntuacion = puntuacion
+        self.vidas = vidas
         imagen_jugar = os.path.join(
             "resources", "images", "fondo_pantalla_jugar2.jpg")
         self.pantalla_jugar = pg.image.load(imagen_jugar)
@@ -535,8 +537,6 @@ class Pantalla_Jugar2(Pantalla):
         self.musica_fondo()
         self.golpeados = False
         self.meteoritos_parar = pg.USEREVENT + 1
-
-        self.jugador.vidas = 3
 
         while not salir:
             self.reloj.tick(FPS)
@@ -562,7 +562,7 @@ class Pantalla_Jugar2(Pantalla):
             self.jugador.update()
             self.aparece_planeta(aterrizaje)
 
-           # CREACION DE ASTEROIDES CUANDO NO ATERRIZA NI GOLPEA
+            # CREACION DE ASTEROIDES CUANDO NO ATERRIZA NI GOLPEA
             if not aterrizaje and not self.golpeados:
                 self.pintar_asteroides()
 
@@ -584,11 +584,28 @@ class Pantalla_Jugar2(Pantalla):
                 if self.iniciales != "salir":
                     agregar_record(self.iniciales, Asteroide.puntuacion)
                 return ("RECORDS")
+
             pg.display.flip()
 
     def pintar_fondo(self):
 
         self.pantalla.blit(self.pantalla_jugar, (0, 0))
+
+    def pintar_vidas(self):
+        vidas = self.jugador.vidas
+        mensaje = f"VIDAS = {vidas}"
+        texto = self.extra_musica.render(mensaje, False, (COLOR_AMARILLO))
+        anchura_texto = texto.get_width()
+        pos_x = ANCHO_PANTALLA - (anchura_texto + 20)
+        pos_y = ALTO_PANTALLA - 50
+        self.pantalla.blit(texto, (pos_x, pos_y))
+
+    def pintar_puntuacion(self):
+        mensaje = f"PUNTOS = {Asteroide.puntuacion}"
+        texto = self.extra_musica.render(mensaje, False, (COLOR_AMARILLO))
+        pos_x = ANCHO_PANTALLA / 40
+        pos_y = ALTO_PANTALLA - 50
+        self.pantalla.blit(texto, (pos_x, pos_y))
 
     def musica_fondo(self):
         pg.mixer.init()
@@ -609,23 +626,6 @@ class Pantalla_Jugar2(Pantalla):
         anchura_texto = texto.get_width()
         pos_x = ANCHO_PANTALLA - (anchura_texto + 20)
         pos_y = ALTO_PANTALLA * 1/28
-        self.pantalla.blit(texto, (pos_x, pos_y))
-
-    def pintar_vidas(self):
-        vidas = self.jugador.vidas
-        mensaje = f"VIDAS = {vidas}"
-        texto = self.extra_musica.render(mensaje, False, (COLOR_AMARILLO))
-        anchura_texto = texto.get_width()
-        pos_x = ANCHO_PANTALLA - (anchura_texto + 20)
-        pos_y = ALTO_PANTALLA - 50
-        self.pantalla.blit(texto, (pos_x, pos_y))
-
-    def pintar_puntuacion(self):
-        puntuacion = Asteroide.puntuacion
-        mensaje = f"PUNTOS = {puntuacion}"
-        texto = self.extra_musica.render(mensaje, False, (COLOR_AMARILLO))
-        pos_x = ANCHO_PANTALLA / 40
-        pos_y = ALTO_PANTALLA - 50
         self.pantalla.blit(texto, (pos_x, pos_y))
 
     def aparece_planeta(self, aterrizar):
@@ -653,6 +653,7 @@ class Pantalla_Jugar2(Pantalla):
         if not aterrizar:
             hit = pg.sprite.spritecollide(self.jugador, self.asteroides, True)
             if hit:
+                self.golpeados = True
                 self.sonido_explosion()
                 self.jugador.nave_golpeada()
                 self.jugador.vidas -= 1
@@ -662,10 +663,6 @@ class Pantalla_Jugar2(Pantalla):
                 if asteroide.rect.x < -35:
                     if not self.jugador.nave_esconder:
                         Asteroide.puntuacion += puntos
-                    # self.asteroides.remove(asteroide)
-
-            # if len(self.asteroides.sprites()) < 3:
-            #     self.crear_asteroides(8, 14, 7)
 
         else:
             self.asteroides.clear(self.pantalla, self.pantalla)
@@ -820,7 +817,7 @@ class Pantalla_Puntuacion(Pantalla):
     #         contador_lugar += 1
 
     def pintar_texto_iniciar(self):
-        mensaje = "Pulsa espacio para volver a la pantalla de inicio"
+        mensaje = "Pulsa <espacio> para volver a la pantalla de inicio"
         texto = self.titulo_instrucciones.render(
             mensaje, True, (COLOR_AMARILLO))
         anchura_texto = texto.get_width()
