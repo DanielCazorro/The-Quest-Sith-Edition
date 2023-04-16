@@ -668,7 +668,7 @@ class Pantalla_Jugar2(Pantalla):
             self.asteroides.clear(self.pantalla, self.pantalla)
 
     def pintar_texto_ganador(self):
-        mensaje = "EL IMPERIO AGRADECE TUS SERVICIOS"
+        mensaje = "EL IMPERIO AGRADECE TUS SERVICIOS  PULSA <ESPACIO>"
         texto = self.titulo_instrucciones.render(mensaje, True, (COLOR_ROJO))
         anchura_texto = texto.get_width()
         pos_x = (ANCHO_PANTALLA - anchura_texto) / 2
