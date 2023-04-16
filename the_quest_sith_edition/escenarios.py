@@ -661,6 +661,37 @@ class Pantalla_Jugar2(Pantalla):
         pos_y = ALTO_PANTALLA * 5/8
         self.pantalla.blit(texto, (pos_x, pos_y))
 
+    def pedir_iniciales(self):
+        iniciales = ""
+        salir = False
+
+        while not salir:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    return "salir"
+                elif event.type == pg.KEYDOWN:
+                    if event.unicode.isalpha() and len(iniciales) < 3:
+                        iniciales += event.unicode.upper()
+                    elif event.key == pg.K_BACKSPACE and len(iniciales) > 0:
+                        iniciales = iniciales[:-1]
+                    elif event.key == pg.K_SPACE and len(iniciales) == 3:
+                        return iniciales
+
+            self.pintar_fondo()
+
+            mensaje = "ingrese sus iniciales: " + iniciales
+            texto = self.titulo.render(mensaje, True, (255, 255, 255))
+            pos_x = ANCHO_PANTALLA / 2 - texto.get_width() / 2
+            pos_y = ALTO_PANTALLA / 2 - texto.get_height() / 2
+            self.pantalla.blit(texto, (pos_x, pos_y))
+            mensaje2 = "Pulsa espacio para continuar"
+            texto = self.titulo.render(mensaje2, True, (255, 255, 255))
+            pos_x2 = ANCHO_PANTALLA / 2 - texto.get_width() / 2
+            pos_y2 = ALTO_PANTALLA * 0.60 - texto.get_height() / 2
+            self.pantalla.blit(texto, (pos_x2, pos_y2))
+
+            pg.display.flip()
+
 
 class Pantalla_Puntuacion(Pantalla):
     def __init__(self, pantalla):
@@ -684,7 +715,7 @@ class Pantalla_Puntuacion(Pantalla):
 
     def mostrar_puntuaciones(self):
         ruta_font = os.path.join("resources", "fonts", "fuente-extra.ttf")
-        self.font = pg.font.Font(ruta_font, 60)
+        self.font = pg.font.Font(ruta_font, 30)
         espacio_vertical = 80
         margen_izquierdo = 150
         margen_superior = 100
