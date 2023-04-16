@@ -57,6 +57,8 @@ class The_Quest:
 
             # Este es el bucle de elección de Pantalla_Inicio
             if pantalla_actual == Inicio:
+                Pantalla_Jugar(self.pantalla)
+                Pantalla_Jugar2(self.pantalla)
                 if resultado_bucle == "SALIR":
                     pantalla_actual = "SALIR"
                 if resultado_bucle == "S":
