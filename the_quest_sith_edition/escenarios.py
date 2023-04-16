@@ -338,6 +338,8 @@ class Pantalla_Jugar(Pantalla):
         aterrizaje = False
         self.musica_fondo()
         self.jugador.vidas = 3
+        self.golpeados = False
+        self.meteoritos_parar = pg.USEREVENT + 1
 
         while not salir:
             self.reloj.tick(FPS)
@@ -353,6 +355,9 @@ class Pantalla_Jugar(Pantalla):
                     else:
                         pg.mixer_music.play(-1, 0.0)
 
+                if event.type == self.meteoritos_parar:
+                    self.golpeados = False
+
             self.pintar_fondo()
             self.pintar_vidas()
             self.pintar_puntuacion()
@@ -360,7 +365,8 @@ class Pantalla_Jugar(Pantalla):
             self.jugador.update()
             self.aparece_planeta(aterrizaje)
 
-            if not aterrizaje:
+            # CREACION DE ASTEROIDES CUANDO NO ATERRIZA NI GOLPEA
+            if not aterrizaje and not self.golpeados:
                 self.pintar_asteroides()
 
             self.colisionar_y_puntos(aterrizaje, 5, 10, 5)
@@ -450,9 +456,11 @@ class Pantalla_Jugar(Pantalla):
         if not aterrizar:
             hit = pg.sprite.spritecollide(self.jugador, self.asteroides, True)
             if hit:
+                self.golpeados = True
                 self.sonido_explosion()
                 self.jugador.nave_golpeada()
                 self.jugador.vidas -= 1
+                pg.time.set_timer(self.meteoritos_parar, 3000)
 
             for asteroide in self.asteroides.sprites():
                 if asteroide.rect.x < -35:
@@ -525,6 +533,8 @@ class Pantalla_Jugar2(Pantalla):
         salir = False
         aterrizaje = False
         self.musica_fondo()
+        self.golpeados = False
+        self.meteoritos_parar = pg.USEREVENT + 1
 
         self.jugador.vidas = 3
 
@@ -542,14 +552,20 @@ class Pantalla_Jugar2(Pantalla):
                     else:
                         pg.mixer_music.play(-1, 0.0)
 
+                if event.type == self.meteoritos_parar:
+                    self.golpeados = False
+
             self.pintar_fondo()
             self.pintar_vidas()
             self.pintar_puntuacion()
             self.pintar_texto_musica()
             self.jugador.update()
             self.aparece_planeta(aterrizaje)
-            if not aterrizaje:
+
+           # CREACION DE ASTEROIDES CUANDO NO ATERRIZA NI GOLPEA
+            if not aterrizaje and not self.golpeados:
                 self.pintar_asteroides()
+
             self.colisionar_y_puntos(aterrizaje, 8, 14, 7)
             if self.jugador.rect.x != 690:
                 self.pantalla.blit(self.jugador.image, self.jugador.rect)
@@ -640,6 +656,7 @@ class Pantalla_Jugar2(Pantalla):
                 self.sonido_explosion()
                 self.jugador.nave_golpeada()
                 self.jugador.vidas -= 1
+                pg.time.set_timer(self.meteoritos_parar, 3000)
 
             for asteroide in self.asteroides.sprites():
                 if asteroide.rect.x < -35:
@@ -691,75 +708,6 @@ class Pantalla_Jugar2(Pantalla):
             self.pantalla.blit(texto, (pos_x2, pos_y2))
 
             pg.display.flip()
-
-
-# class Pantalla_Puntuacion(Pantalla):
-#     def __init__(self, pantalla):
-#         super().__init__(pantalla)
-#         imagen_historia = os.path.join(
-#             "resources", "images", "fondo_pantalla_records.jpg")
-#         self.pantalla_records = pg.image.load(imagen_historia)
-#         self.records = rec_puntuaciones()
-
-#     def musica_fondo(self):
-#         pg.mixer.init()
-#         musica_fondo = os.path.join(
-#             "resources", "sounds", "musica_instrucciones.mp3")
-#         pg.mixer.music.load(musica_fondo)
-#         pg.mixer.music.set_volume(0.75)
-#         pg.mixer.music.play(-1, 0.0)
-
-#     def pintar_fondo(self):
-
-#         self.pantalla.blit(self.pantalla_records, (0, 0))
-
-#     def mostrar_puntuaciones(self):
-#         ruta_font = os.path.join("resources", "fonts", "fuente-extra.ttf")
-#         self.font = pg.font.Font(ruta_font, 30)
-#         espacio_vertical = 80
-#         margen_izquierdo = 150
-#         margen_superior = 100
-
-#         mensaje = "Pulsa espacio para volver a la pantalla de inicio"
-#         texto = self.font.render(mensaje, True, (255, 255, 255))
-#         pos_x = ANCHO_PANTALLA - texto.get_width()/2
-#         pos_y = ALTO_PANTALLA * 0.60
-#         self.pantalla.blit(texto, (pos_x, pos_y))
-
-#         encabezado_nombre = self.font.render("Nombre", True, (255, 255, 255))
-#         encabezado_record = self.font.render("Record", True, (255, 255, 255))
-#         self.pantalla.blit(encabezado_nombre,
-#                            (margen_izquierdo, margen_superior))
-#         self.pantalla.blit(encabezado_record, (ANCHO_PANTALLA //
-#                            2 + margen_izquierdo, margen_superior))
-
-#         for index, record in enumerate(self.records):
-#             texto_nombre = self.font.render(
-#                 record["nombre"], True, (255, 255, 255))
-#             texto_record = self.font.render(
-#                 str(record["record"]), True, (255, 255, 255))
-
-#             y = margen_superior + espacio_vertical * (index + 1)
-#             self.pantalla.blit(texto_nombre, (margen_izquierdo, y))
-#             self.pantalla.blit(
-#                 texto_record, (ANCHO_PANTALLA // 2 + margen_izquierdo, y))
-
-#             if index >= 5:
-#                 break
-
-#     def bucle_principal(self):
-#         salir = False
-#         while not salir:
-#             self.pintar_fondo()
-#             self.mostrar_puntuaciones()
-
-#             for event in pg.event.get():
-#                 if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
-#                     return "SALIR"
-#                 elif event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-#                     return "INICIO"
-
-#             pg.display.flip()
 
 
 class Pantalla_Puntuacion(Pantalla):
