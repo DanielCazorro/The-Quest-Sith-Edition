@@ -1,30 +1,27 @@
-# The-Quest-Sith-Edition
-Simple game: Avoid asteroids and land in planet, like a Lord Sith.
+# The Quest Sith Edition
 
-# Creación del entorno Virtual
+A simple game where you navigate through space, avoiding asteroids and landing on a planet like a Lord Sith.
 
-1. Se deberá crear un entorno virtual. Para ello, utilizamos el siguiente comando:
-```
-En Windows: python -m venv env
-En Linux/Mac: python3 -m venv env
-```
+## Screenshots
 
-2. Después, debermos activar el entorno virtual. Desde el terminal utilizamos:
-```
-En Windows: env\Scripts\activate
-En Linux/Mac: ./env/bin/activate
-```
-# Instalación de recursos
+![Screenshot 1](https://github.com/DanielCazorro/The-Quest-Sith-Edition/blob/main/Pictures/Screen1.png) ![Screenshot 2](https://github.com/DanielCazorro/The-Quest-Sith-Edition/blob/main/Pictures/Screen2.png) ![Screenshot 3](https://github.com/DanielCazorro/The-Quest-Sith-Edition/blob/main/Pictures/Screen3.png) ![Screenshot 4](https://github.com/DanielCazorro/The-Quest-Sith-Edition/blob/main/Pictures/Screen4.png) ![Screenshot 5](https://github.com/DanielCazorro/The-Quest-Sith-Edition/blob/main/Pictures/Screen5.png) ![Screenshot 6](https://github.com/DanielCazorro/The-Quest-Sith-Edition/blob/main/Pictures/Screen6.png)
 
-Para instalar los recursos necesarios en el entorno virtual para poder jugar, utilizaremos el comando 
+## Getting Started
 
-`pip install -r requirements.txt`
+### Prerequisites
 
-En este archivo requirements.txt encontrarás todos los paquetes necesarios.
+1. Python 3
+2. Pip (Python Package Installer)
 
-# Cómo jugar
+### Virtual Environment Setup
 
-Para poder jugar, se debe inicializar el archivo main.py
+1. Create a virtual environment: - On Windows: `python -m venv env` - On Linux/Mac: `python3 -m venv env`
+2. Activate the virtual environment: - On Windows: `env\Scripts\activate` - On Linux/Mac: `./env/bin/activate`
 
-Desde un terminal, escribir el comando `python main.py` desde Windows, o `python3 main.py` desde Linux o Mac
+### Install Dependencies
 
+Install the required packages for the virtual environment using: ```bash pip install -r requirements.txt ``` The `requirements.txt` file contains all the necessary dependencies.
+
+## How to Play
+
+To start playing, initialize the game by running: ```bash python main.py # On Windows python3 main.py # On Linux/Mac ```

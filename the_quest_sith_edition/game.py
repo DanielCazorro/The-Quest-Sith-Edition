@@ -112,5 +112,5 @@ class The_Quest:
                     pantalla_actual = "SALIR"
                 if resultado_bucle == "B":
                     pantalla_actual = Inicio
-        pg.quit
+        pg.quit()
         return

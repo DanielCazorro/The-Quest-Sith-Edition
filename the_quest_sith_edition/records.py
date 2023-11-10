@@ -2,16 +2,15 @@ import sqlite3
 
 
 def inicializar_base_datos():
-    conn = sqlite3.connect("data/records.db")
-    cursor = conn.cursor()
-
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS records (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nombre TEXT NOT NULL,
-            record INTEGER NOT NULL
-        )
-    """)
+    with sqlite3.connect("data/records.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS records (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nombre TEXT NOT NULL,
+                record INTEGER NOT NULL
+            )
+        """)
 
     conn.commit()
     conn.close()
