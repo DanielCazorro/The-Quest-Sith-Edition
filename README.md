@@ -25,5 +25,5 @@ Install the required packages for the virtual environment using: ```bash pip ins
 ## How to Play
 
 To start playing, initialize the game by running:
- # On Windows   ```bash python main.py ```
- # On Linux/Mac ```python3 main.py ``` 
+On Windows   ```bash python main.py ```
+On Linux/Mac ```python3 main.py ``` 
